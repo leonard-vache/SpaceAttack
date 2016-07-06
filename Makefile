@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/leo/Bureau/newSP
+CMAKE_SOURCE_DIR = /home/leo/Git_Project/SpaceAttack
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/leo/Bureau/newSP
+CMAKE_BINARY_DIR = /home/leo/Git_Project/SpaceAttack
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -73,9 +73,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/leo/Bureau/newSP/CMakeFiles /home/leo/Bureau/newSP/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/leo/Git_Project/SpaceAttack/CMakeFiles /home/leo/Git_Project/SpaceAttack/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/leo/Bureau/newSP/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/leo/Git_Project/SpaceAttack/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

@@ -1,4 +1,4 @@
-# Install script for directory: /home/leo/Bureau/newSP
+# Install script for directory: /home/leo/Git_Project/SpaceAttack
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,7 +38,7 @@ else()
   set(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 endif()
 
-file(WRITE "/home/leo/Bureau/newSP/${CMAKE_INSTALL_MANIFEST}" "")
+file(WRITE "/home/leo/Git_Project/SpaceAttack/${CMAKE_INSTALL_MANIFEST}" "")
 foreach(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  file(APPEND "/home/leo/Bureau/newSP/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  file(APPEND "/home/leo/Git_Project/SpaceAttack/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 endforeach()

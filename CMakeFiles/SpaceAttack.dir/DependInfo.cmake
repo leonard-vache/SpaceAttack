@@ -4,12 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/leo/Bureau/newSP/src/Collision.c" "/home/leo/Bureau/newSP/CMakeFiles/SpaceAttack.dir/src/Collision.c.o"
-  "/home/leo/Bureau/newSP/src/GameMgt.c" "/home/leo/Bureau/newSP/CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o"
-  "/home/leo/Bureau/newSP/src/GraphicsMgt.c" "/home/leo/Bureau/newSP/CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o"
-  "/home/leo/Bureau/newSP/src/KeyboardMgt.c" "/home/leo/Bureau/newSP/CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o"
-  "/home/leo/Bureau/newSP/src/main.c" "/home/leo/Bureau/newSP/CMakeFiles/SpaceAttack.dir/src/main.c.o"
-  "/home/leo/Bureau/newSP/src/opstruct.c" "/home/leo/Bureau/newSP/CMakeFiles/SpaceAttack.dir/src/opstruct.c.o"
+  "/home/leo/Git_Project/SpaceAttack/src/Collision.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/Collision.c.o"
+  "/home/leo/Git_Project/SpaceAttack/src/GameMgt.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o"
+  "/home/leo/Git_Project/SpaceAttack/src/GraphicsMgt.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o"
+  "/home/leo/Git_Project/SpaceAttack/src/KeyboardMgt.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o"
+  "/home/leo/Git_Project/SpaceAttack/src/main.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/main.c.o"
+  "/home/leo/Git_Project/SpaceAttack/src/opstruct.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/opstruct.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

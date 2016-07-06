@@ -6,29 +6,33 @@
 
 #IncludeRegexTransform: 
 
-/home/leo/Bureau/newSP/src/Collision.c
+/home/leo/Git_Project/SpaceAttack/src/Collision.c
 Collision.h
-/home/leo/Bureau/newSP/src/Collision.h
+/home/leo/Git_Project/SpaceAttack/src/Collision.h
 math.h
-/home/leo/Bureau/newSP/src/math.h
+/home/leo/Git_Project/SpaceAttack/src/math.h
 
-/home/leo/Bureau/newSP/src/GameMgt.c
+/home/leo/Git_Project/SpaceAttack/src/GameMgt.c
 GameMgt.h
-/home/leo/Bureau/newSP/src/GameMgt.h
+/home/leo/Git_Project/SpaceAttack/src/GameMgt.h
 
-/home/leo/Bureau/newSP/src/GraphicsMgt.c
+/home/leo/Git_Project/SpaceAttack/src/GraphicsMgt.c
 GraphicsMgt.h
-/home/leo/Bureau/newSP/src/GraphicsMgt.h
+/home/leo/Git_Project/SpaceAttack/src/GraphicsMgt.h
 
-/home/leo/Bureau/newSP/src/KeyboardMgt.c
+/home/leo/Git_Project/SpaceAttack/src/KeyboardMgt.c
 KeyboardMgt.h
-/home/leo/Bureau/newSP/src/KeyboardMgt.h
+/home/leo/Git_Project/SpaceAttack/src/KeyboardMgt.h
 
-/home/leo/Bureau/newSP/src/main.c
+/home/leo/Git_Project/SpaceAttack/src/main.c
 Common.h
-/home/leo/Bureau/newSP/src/Common.h
+/home/leo/Git_Project/SpaceAttack/src/Common.h
 Prototypes.h
-/home/leo/Bureau/newSP/src/Prototypes.h
+/home/leo/Git_Project/SpaceAttack/src/Prototypes.h
+
+/home/leo/Git_Project/SpaceAttack/src/opstruct.c
+opstruct.h
+/home/leo/Git_Project/SpaceAttack/src/opstruct.h
 
 /usr/include/SDL2/SDL.h
 SDL_main.h
