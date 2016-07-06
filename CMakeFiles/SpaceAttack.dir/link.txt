@@ -1,0 +1,1 @@
+/usr/bin/cc      CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o CMakeFiles/SpaceAttack.dir/src/main.c.o CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o CMakeFiles/SpaceAttack.dir/src/Collision.c.o CMakeFiles/SpaceAttack.dir/src/opstruct.c.o CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o  -o bin/SpaceAttack -rdynamic -Wl,-Bstatic -lSDL2main -Wl,-Bdynamic -lSDL2 -lpthread -lm 

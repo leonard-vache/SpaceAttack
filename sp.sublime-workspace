@@ -1,0 +1,1271 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"en",
+				"en"
+			],
+			[
+				"sp_",
+				"shp_box"
+			],
+			[
+				"x",
+				"x"
+			],
+			[
+				"get",
+				"getShip"
+			],
+			[
+				"p_",
+				"p_bbox1"
+			],
+			[
+				"rotate",
+				"rotatePolygone"
+			],
+			[
+				"SDL_",
+				"SDL_Point"
+			],
+			[
+				"SDL_Render",
+				"SDL_RenderDrawLine"
+			],
+			[
+				"shp",
+				"shp_bbox1"
+			],
+			[
+				"sc",
+				"SCREEN_HEIGHT"
+			],
+			[
+				"text",
+				"texture_pos"
+			],
+			[
+				"h",
+				"height"
+			],
+			[
+				"tu",
+				"turn_left"
+			],
+			[
+				"update",
+				"updateEnemy1List"
+			],
+			[
+				"pl",
+				"pl_enn"
+			],
+			[
+				"w",
+				"w"
+			],
+			[
+				"SDL",
+				"SDL_Point"
+			],
+			[
+				"SDL_Re",
+				"SDL_Rect"
+			],
+			[
+				"t",
+				"texture"
+			],
+			[
+				"up",
+				"updateListMotion"
+			],
+			[
+				"upa",
+				"updateFireList"
+			],
+			[
+				"ship",
+				"shipFire"
+			],
+			[
+				"loaded",
+				"loadedImage"
+			],
+			[
+				"load",
+				"loadImage"
+			],
+			[
+				"inc",
+				"include"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "Searching 91 files for \"Polygone\"\n\n/home/leo/Bureau/newSP/bin/SpaceAttack:\n    <binary>\n\n/home/leo/Bureau/newSP/include/Common.h:\n   36  } SpaceAttack_Texture;\n   37  \n   38: typedef struct polygone \n   39  {\n   40    SDL_Point ul;   // Upper left\n   ..\n   44    int width;\n   45    int height;\n   46: } Polygone;\n   47  \n   48  #endif\n\n/home/leo/Bureau/newSP/include/Prototypes.h:\n   16  extern SDL_Rect *getShipBbox1();\n   17  extern SDL_Rect *getShipBbox2();\n   18: extern Polygone *getPolyBbox1();\n   19: extern Polygone *getPolyBbox2();\n   20  extern void setBoundingBox();\n   21  extern void updateBoundingBox();\n\n/home/leo/Bureau/newSP/src/Collision.c:\n    5  SDL_Rect shp_bbox2;\n    6  \n    7: Polygone p_bbox1, p_bbox2;\n    8  \n    9  SDL_Rect *getShipBbox1() { return &shp_bbox1; }\n   10  SDL_Rect *getShipBbox2() { return &shp_bbox2; }\n   11  \n   12: Polygone *getPolyBbox1() { return &p_bbox1; }\n   13: Polygone *getPolyBbox2() { return &p_bbox2; }\n   14  \n   15  \n   ..\n   77  \n   78  \n   79: void rotatePolygone(Polygone *poly, Pelement el, float delta_angle)\n   80  {\n   81    rotatePoint(&(poly->ul), delta_angle);\n   ..\n   94    // Y = x*sin(θ) + y*cos(θ)\n   95    //printf(\"%d -%d = %d\\n\",shp->angle, previous_angle, shp->angle - previous_angle);\n   96:   rotatePolygone(getPolyBbox1(), shp, M_PI/180.0 * (shp->angle - previous_angle));\n   97:   rotatePolygone(getPolyBbox2(), shp, M_PI/180.0 * (shp->angle - previous_angle));\n   98  \n   99    if(shp->angle == -90.0 || shp->angle == 270.0) setBoundingBox(); // Reset bounding box \n\n/home/leo/Bureau/newSP/src/GraphicsMgt.c:\n   75  \n   76  \n   77: void drawPolygone(Polygone *poly)\n   78  {\n   79    SDL_RenderDrawLine(getRenderer(),poly->ul.x, poly->ul.y, poly->ur.x, poly->ur.y);\n   ..\n   84  \n   85  \n   86: void drawBBox(Polygone *poly, Pelement el)\n   87  {\n   88    int ex = el->pos.x;\n   ..\n  124    drawBBox(getPolyBbox2(), getShip());\n  125  \n  126:   //drawPolygone(getPolyBbox1());\n  127:   //drawPolygone(getPolyBbox2());\n  128  }\n  129  \n\n20 matches across 5 files\n\n\nSearching 91 files for \"updateBoundingBox\"\n\n/home/leo/Bureau/newSP/bin/SpaceAttack:\n    <binary>\n\n/home/leo/Bureau/newSP/include/Prototypes.h:\n   19  extern Polygone *getPolyBbox2();\n   20  extern void setBoundingBox();\n   21: extern void updateBoundingBox();\n   22  \n   23  extern int adaptToFPS(float value);\n\n/home/leo/Bureau/newSP/src/Collision.c:\n  145  \n  146  \n  147: void updateBoundingBox(Pelement el)\n  148  {\n  149    // X = x*cos(θ) - y*sin(θ)\n\n/home/leo/Bureau/newSP/src/GameMgt.c:\n  186      enemy1Pattern();\n  187      updateListMotion(getEnemy1List(),updateEnemy1List);\n  188:     updateBoundingBox();\n  189      //setBoundingBox();\n  190      drawGame();\n\n5 matches across 4 files\n\n\nSearching 91 files for \"updateBoundingBox\"\n\n/home/leo/Bureau/newSP/bin/SpaceAttack:\n    <binary>\n\n/home/leo/Bureau/newSP/include/Prototypes.h:\n   19  extern Polygone *getPolyBbox2();\n   20  extern void setBoundingBox();\n   21: extern void updateBoundingBox();\n   22  \n   23  extern int adaptToFPS(float value);\n\n/home/leo/Bureau/newSP/src/Collision.c:\n  171  \n  172  \n  173: void updateBoundingBox(Pelement el)\n  174  {\n  175    // X = x*cos(θ) - y*sin(θ)\n\n/home/leo/Bureau/newSP/src/GameMgt.c:\n  188      enemy1Pattern();\n  189      updateListMotion(getEnemy1List(),updateEnemy1List);\n  190:     updateBoundingBox(getShip());\n  191      Pelement pl_enn = getEnemy1List();\n  192      while(pl_enn != NULL)\n  193      {\n  194:       updateBoundingBox(pl_enn);\n  195        pl_enn = pl_enn->next;\n  196      }\n\n6 matches across 4 files\n\n\nSearching 91 files for \"ptrFunction\"\n\n/home/leo/Bureau/newSP/include/GameMgt.h:\n   11  \n   12  // Pointeur sur fonction update**ListMotion. Toutes les fonctions qui retourne void + prenne en argument Pelement\n   13: typedef void (*ptrFunction)(Pelement);\n   14: // Prend en deuxième argument une fonctin de type ptrFunction\n   15: void updateListMotion(Pelement pl, ptrFunction updateList);\n   16  \n   17  #endif\n\n/home/leo/Bureau/newSP/src/GameMgt.c:\n   51  }\n   52  \n   53: void updateListMotion(Pelement pl, ptrFunction updateList)\n   54  {\n   55    Pelement pl_prev = pl;\n\n4 matches across 2 files\n\n\nSearching 91 files for \"printf\"\n\n/home/leo/Bureau/newSP/bin/SpaceAttack:\n    <binary>\n\n/home/leo/Bureau/newSP/old/jeu.c:\n  383  		}\n  384  		\n  385: 		sprintf(tab, \"Score: %d\", score);	// Ecriture du score dans le tableau tab\n  386  		pscore = TTF_RenderText_Blended(police, tab, couleurGrise); // Ecriture du tableau sur la surface pscore\n  387  		SDL_BlitSurface(pscore, NULL, ecran, &position_score); // Affichage du score\n  ...\n  495          SDL_BlitSurface(gameover, NULL, ecran, &position_gameover);\n  496          \n  497:         sprintf(tab, \"Votre Score: %d\", *score);\n  498  		pscore = TTF_RenderText_Blended(police, tab, couleurGrise);\n  499  		SDL_BlitSurface(pscore, NULL, ecran, &position_score);\n  ...\n  626          SDL_BlitSurface(victoire, NULL, ecran, &position_victoire);\n  627          \n  628:         sprintf(tab, \"Votre Score: %d\", *score);\n  629  		pscore = TTF_RenderText_Blended(police, tab, couleurGrise);\n  630  		SDL_BlitSurface(pscore, NULL, ecran, &position_score);\n\n/home/leo/Bureau/newSP/src/Collision.c:\n   19    if (en_box->nb_box != 2)\n   20    {\n   21:     printf(\"Error in setEnemyBoundingBox 2 BoundingBox are expected\\n\");\n   22      stopGame();\n   23      return;\n   ..\n   61    if (shp_box->nb_box != 2)\n   62    {\n   63:     printf(\"Error in setShipBoundingBox 2 BoundingBox are expected\\n\");\n   64      stopGame();\n   65      return;\n   ..\n  123  \n  124  /*\n  125:   printf(\"p_bbox1.ul=(%d,%d)\\n\",p_bbox1.ul.x,p_bbox1.ul.y);\n  126:   printf(\"p_bbox1.ur=(%d,%d)\\n\",p_bbox1.ur.x,p_bbox1.ur.y);\n  127:   printf(\"p_bbox1.bl=(%d,%d)\\n\",p_bbox1.bl.x,p_bbox1.bl.y);\n  128:   printf(\"p_bbox1.br=(%d,%d)\\n\",p_bbox1.br.x,p_bbox1.br.y);\n  129  \n  130  \n  131:   printf(\"p_bbox1.height=%d p_bbox1.width=%d\\n\",p_bbox1.height,p_bbox1.width);\n  132  */\n  133  \n\n/home/leo/Bureau/newSP/src/GameMgt.c:\n   32    if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) \n   33    { \n   34:     printf( \"SDL could not initialize! SDL_Error: %s\\n\", SDL_GetError() ); \n   35      return 0; \n   36    }\n   ..\n   44    if(screen == NULL || renderer == NULL)\n   45    {\n   46:     printf( \"SDL could not create window or renderer! SDL_Error: %s\\n\", SDL_GetError() ); \n   47      return 0;\n   48    }\n   ..\n  122          else pl_enn->angle += pl_enn->speed[1];\n  123      }\n  124:    // printf(\"enn angle = %d\\n\",pl_enn->angle);\n  125      pl_enn = pl_enn->next;\n  126    }\n  ...\n  192      while(pl_enn != NULL)\n  193      {\n  194:       printf(\"-----\\n\");\n  195        updateBoundingBox(pl_enn);\n  196:       printf(pl_enn->bbox.)\n  197        pl_enn = pl_enn->next;\n  198      }\n  ...\n  209  {\n  210    cleanGraphics();\n  211:   printf(\"Graphics clean\\n\");\n  212    delete_all(fireList);\n  213    delete_all(enemy1List);\n  214:   printf(\"List Clean\\n\");\n  215    SDL_DestroyRenderer(renderer);\n  216    renderer = NULL;\n\n/home/leo/Bureau/newSP/src/GraphicsMgt.c:\n   23      if(texture == NULL)\n   24      {\n   25:       printf(\"Texture non créée ! SDL_Error : %s\\n\", SDL_GetError());\n   26        exit(0);\n   27      }\n   ..\n   29    else\n   30    {\n   31:     printf(\"L'image n'a pas pu être chargée! SDL_Error : %s\\n\", SDL_GetError());\n   32      exit(0);\n   33    } \n   ..\n   53      if(texture == NULL)\n   54      {\n   55:       printf(\"Texture non créée ! SDL_Error : %s\\n\", SDL_GetError());\n   56        exit(0);\n   57      }\n   ..\n   59    else\n   60    {\n   61:     printf(\"L'image n'a pas pu être chargée! SDL_Error : %s\\n\", SDL_GetError());\n   62      exit(0);\n   63    } \n   ..\n  129    while(pl_enn != NULL)\n  130    {\n  131:     printf(\"draw enemy\\n\");\n  132      drawBBox(pl_enn);\n  133      pl_enn = pl_enn->next;\n  ...\n  165    if (SDL_RenderCopyEx(getRenderer(),el->txt,NULL,&texture_pos,round(el->angle)+90,&center,SDL_FLIP_NONE) < 0)\n  166    {\n  167:     printf(\"Error when rotate on left. SDL Error : %s\\n\", SDL_GetError());\n  168      stopGame();\n  169      return;\n  ...\n  200    if (SDL_RenderCopyEx(getRenderer(),image,NULL,&dest,round(angle)+90,&center,SDL_FLIP_NONE) < 0)\n  201    {\n  202:     printf(\"Error when rotate on left. SDL Error : %s\\n\", SDL_GetError());\n  203      stopGame();\n  204      return;\n\n/home/leo/Bureau/newSP/src/KeyboardMgt.c:\n   78  \n   79          default :\n   80:           printf(\"Error unknown motion\\n\");\n   81            stopGame();\n   82            break;\n   ..\n  129            default:\n  130              //stopGame();\n  131:             printf(\"Warning : Key unrecogize\\n\");\n  132              break;\n  133          }\n  ...\n  163            default:\n  164              //stopGame();\n  165:             printf(\"Warning : Key unrecogize\\n\");\n  166              break;\n  167          }\n\n/home/leo/Bureau/newSP/src/opstruct.c:\n    8    if (el == NULL)\n    9    {\n   10:     printf(\"Error : element created is NULL\");\n   11      stopGame();\n   12      return;\n   ..\n   20    if(SDL_QueryTexture(t, NULL, NULL, &(el->pos.w), &(el->pos.h)) < 0) \n   21    {\n   22:     printf(\"Can not get texture dimension ! SDL_Error : %s\", SDL_GetError());\n   23      stopGame();\n   24    }\n   ..\n   39    if (pliste == NULL && el == NULL)\n   40    {\n   41:       printf(\"Error : list and element to add is empty\\n\");\n   42        stopGame();\n   43        return;\n   ..\n   52    if (pliste == NULL)\n   53    {\n   54:     printf(\"Error can not extract an empty list\\n\");\n   55      stopGame();\n   56      return;\n\n33 matches across 7 files\n\n\nSearching 6 files for \"printf\"\n\n/home/leo/Bureau/newSP/src/Collision.c:\n   19    if (en_box->nb_box != 2)\n   20    {\n   21:     printf(\"Error in setEnemyBoundingBox 2 BoundingBox are expected\\n\");\n   22      stopGame();\n   23      return;\n   ..\n   61    if (shp_box->nb_box != 2)\n   62    {\n   63:     printf(\"Error in setShipBoundingBox 2 BoundingBox are expected\\n\");\n   64      stopGame();\n   65      return;\n   ..\n  123  \n  124  /*\n  125:   printf(\"p_bbox1.ul=(%d,%d)\\n\",p_bbox1.ul.x,p_bbox1.ul.y);\n  126:   printf(\"p_bbox1.ur=(%d,%d)\\n\",p_bbox1.ur.x,p_bbox1.ur.y);\n  127:   printf(\"p_bbox1.bl=(%d,%d)\\n\",p_bbox1.bl.x,p_bbox1.bl.y);\n  128:   printf(\"p_bbox1.br=(%d,%d)\\n\",p_bbox1.br.x,p_bbox1.br.y);\n  129  \n  130  \n  131:   printf(\"p_bbox1.height=%d p_bbox1.width=%d\\n\",p_bbox1.height,p_bbox1.width);\n  132  */\n  133  \n\n/home/leo/Bureau/newSP/src/GameMgt.c:\n   32    if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) \n   33    { \n   34:     printf( \"SDL could not initialize! SDL_Error: %s\\n\", SDL_GetError() ); \n   35      return 0; \n   36    }\n   ..\n   44    if(screen == NULL || renderer == NULL)\n   45    {\n   46:     printf( \"SDL could not create window or renderer! SDL_Error: %s\\n\", SDL_GetError() ); \n   47      return 0;\n   48    }\n   ..\n  122          else pl_enn->angle += pl_enn->speed[1];\n  123      }\n  124:    // printf(\"enn angle = %d\\n\",pl_enn->angle);\n  125      pl_enn = pl_enn->next;\n  126    }\n  ...\n  192      while(pl_enn != NULL)\n  193      {\n  194:       printf(\"-----\\n\");\n  195        updateBoundingBox(pl_enn);\n  196:       printf(pl_enn->bbox.)\n  197        pl_enn = pl_enn->next;\n  198      }\n  ...\n  209  {\n  210    cleanGraphics();\n  211:   printf(\"Graphics clean\\n\");\n  212    delete_all(fireList);\n  213    delete_all(enemy1List);\n  214:   printf(\"List Clean\\n\");\n  215    SDL_DestroyRenderer(renderer);\n  216    renderer = NULL;\n\n/home/leo/Bureau/newSP/src/GraphicsMgt.c:\n   23      if(texture == NULL)\n   24      {\n   25:       printf(\"Texture non créée ! SDL_Error : %s\\n\", SDL_GetError());\n   26        exit(0);\n   27      }\n   ..\n   29    else\n   30    {\n   31:     printf(\"L'image n'a pas pu être chargée! SDL_Error : %s\\n\", SDL_GetError());\n   32      exit(0);\n   33    } \n   ..\n   53      if(texture == NULL)\n   54      {\n   55:       printf(\"Texture non créée ! SDL_Error : %s\\n\", SDL_GetError());\n   56        exit(0);\n   57      }\n   ..\n   59    else\n   60    {\n   61:     printf(\"L'image n'a pas pu être chargée! SDL_Error : %s\\n\", SDL_GetError());\n   62      exit(0);\n   63    } \n   ..\n  129    while(pl_enn != NULL)\n  130    {\n  131:     printf(\"draw enemy\\n\");\n  132      drawBBox(pl_enn);\n  133      pl_enn = pl_enn->next;\n  ...\n  165    if (SDL_RenderCopyEx(getRenderer(),el->txt,NULL,&texture_pos,round(el->angle)+90,&center,SDL_FLIP_NONE) < 0)\n  166    {\n  167:     printf(\"Error when rotate on left. SDL Error : %s\\n\", SDL_GetError());\n  168      stopGame();\n  169      return;\n  ...\n  200    if (SDL_RenderCopyEx(getRenderer(),image,NULL,&dest,round(angle)+90,&center,SDL_FLIP_NONE) < 0)\n  201    {\n  202:     printf(\"Error when rotate on left. SDL Error : %s\\n\", SDL_GetError());\n  203      stopGame();\n  204      return;\n\n/home/leo/Bureau/newSP/src/KeyboardMgt.c:\n   78  \n   79          default :\n   80:           printf(\"Error unknown motion\\n\");\n   81            stopGame();\n   82            break;\n   ..\n  129            default:\n  130              //stopGame();\n  131:             printf(\"Warning : Key unrecogize\\n\");\n  132              break;\n  133          }\n  ...\n  163            default:\n  164              //stopGame();\n  165:             printf(\"Warning : Key unrecogize\\n\");\n  166              break;\n  167          }\n\n/home/leo/Bureau/newSP/src/opstruct.c:\n    8    if (el == NULL)\n    9    {\n   10:     printf(\"Error : element created is NULL\");\n   11      stopGame();\n   12      return;\n   ..\n   20    if(SDL_QueryTexture(t, NULL, NULL, &(el->pos.w), &(el->pos.h)) < 0) \n   21    {\n   22:     printf(\"Can not get texture dimension ! SDL_Error : %s\", SDL_GetError());\n   23      stopGame();\n   24    }\n   ..\n   39    if (pliste == NULL && el == NULL)\n   40    {\n   41:       printf(\"Error : list and element to add is empty\\n\");\n   42        stopGame();\n   43        return;\n   ..\n   52    if (pliste == NULL)\n   53    {\n   54:     printf(\"Error can not extract an empty list\\n\");\n   55      stopGame();\n   56      return;\n\n28 matches across 5 files\n\n\nSearching 6 files for \"setEnemyBoundingBox\"\n\n/home/leo/Bureau/newSP/src/Collision.c:\n   14  \n   15  \n   16: void setEnemyBoundingBox(Pelement en)\n   17  {\n   18    BoundingBox *en_box = &(en->bbox);\n   19    if (en_box->nb_box != 2)\n   20    {\n   21:     printf(\"Error in setEnemyBoundingBox 2 BoundingBox are expected\\n\");\n   22      stopGame();\n   23      return;\n\n/home/leo/Bureau/newSP/src/GameMgt.c:\n  145    r.y = 30;\n  146    Pelement newEnemy1 = create(spTxt.enemy1, r, ENEMY1_LINEAR_VELOCITY, ENEMY1_ANGULAR_VELOCITY, 180.0, 2);\n  147:   newEnemy1->bbox.init_bbox = setEnemyBoundingBox;\n  148    updateEnemy1List(add(getEnemy1List(),newEnemy1));\n  149  \n\n3 matches across 2 files\n\n\nSearching 6 files for \"mod\"\n\n/home/leo/Bureau/newSP/src/Collision.c:\n  136      rotatePolygone(&(el->bbox.box[i]), M_PI/180.0 * (el->angle - el->bbox.previous_angle));\n  137  \n  138:   if(el->angle == modf(el->bbox.initial_angle - 360)%360 || el->angle == (el->bbox.initial_angle + 360)%360) el->bbox.init_bbox(el); // Reset bounding box \n  139    el->bbox.previous_angle = el->angle;  \n  140  }\n\n/home/leo/Bureau/newSP/src/KeyboardMgt.c:\n   62            shp->angle -= (float)shp->speed[1];    \n   63            if (shp->angle < -360 )\n   64:             shp->angle = fmod(shp->angle,360.f);     \n   65  \n   66            break;\n   ..\n   69            shp->angle += (float)shp->speed[1];\n   70            if (shp->angle > 360 )\n   71:             shp->angle = fmod(shp->angle,360.f);  \n   72  \n   73            break;\n\n3 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 15523,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "include/Common.h",
+			"settings":
+			{
+				"buffer_size": 815,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/Prototypes.h",
+			"settings":
+			{
+				"buffer_size": 754,
+				"line_ending": "Unix",
+				"name": "#ifndef"
+			}
+		},
+		{
+			"file": "src/main.c",
+			"settings":
+			{
+				"buffer_size": 350,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/opstruct.c",
+			"settings":
+			{
+				"buffer_size": 1830,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/opstruct.h",
+			"settings":
+			{
+				"buffer_size": 1024,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Collision.c",
+			"settings":
+			{
+				"buffer_size": 4860,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/Collision.h",
+			"settings":
+			{
+				"buffer_size": 385,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/KeyboardMgt.c",
+			"settings":
+			{
+				"buffer_size": 3819,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/KeyboardMgt.h",
+			"settings":
+			{
+				"buffer_size": 145,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/GameMgt.c",
+			"settings":
+			{
+				"buffer_size": 5253,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/GameMgt.h",
+			"settings":
+			{
+				"buffer_size": 487,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/GraphicsMgt.c",
+			"settings":
+			{
+				"buffer_size": 5871,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/GraphicsMgt.h",
+			"settings":
+			{
+				"buffer_size": 503,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/leo/Bureau/newSP",
+		"/home/leo/Bureau/newSP/include",
+		"/home/leo/Bureau/newSP/src"
+	],
+	"file_history":
+	[
+		"/home/leo/Bureau/newSP/src/GraphicsMgt.c",
+		"/home/leo/Bureau/newSP/src/Collisionc",
+		"/home/leo/Bureau/newSP/old/collision.c",
+		"/home/leo/Bureau/newSP/CMakeLists.txt",
+		"/home/leo/Bureau/newSP/include/GraphicsMgt.h",
+		"/home/leo/Bureau/newSP/include/KeyboardMgt.h",
+		"/home/leo/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/leo/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/leo/.config/sublime-text-3/Packages/User/JSON.sublime-settings",
+		"/home/leo/Bureau/newSP/old/affichage.c",
+		"/home/leo/Bureau/newSP/old/jeu.c",
+		"/home/leo/Bureau/newSP/old/collision.h",
+		"/home/leo/Bureau/newSP/bin/SpaceAttack",
+		"/home/leo/Bureau/newSP/include/GameMgt.h",
+		"/home/leo/Bureau/newSP/old/niveau.h",
+		"/home/leo/Bureau/newSP/old/niveau.c",
+		"/home/leo/Bureau/newSP/src/KeyboardMgt.c",
+		"/home/leo/Bureau/newSP/old/main.c",
+		"/home/leo/Bureau/newSP/old/constantes.h",
+		"/home/leo/Bureau/newSP/src/affichage.c",
+		"/home/leo/Bureau/newSP/sp.sublime-project",
+		"/home/leo/Documents/Projet Polytech/Space Attack/opstruct.h",
+		"/home/leo/Documents/Projet Polytech/Space Attack/niveau.h",
+		"/home/leo/Documents/Projet Polytech/Space Attack/jeu.h",
+		"/home/leo/Documents/Projet Polytech/Space_Attack_v2/src/affichage.c",
+		"/home/leo/Documents/Projet Polytech/Space_Attack_v2/src/collision.c",
+		"/home/leo/Documents/Projet Polytech/Space_Attack_v2/src/jeu.c",
+		"/home/leo/Documents/Projet Polytech/Space_Attack_v2/CMakeLists.txt",
+		"/home/leo/Documents/Projet Polytech/Space_Attack_v2/src/opstruct.c",
+		"/home/leo/Documents/Projet Polytech/Space_Attack_v2/include/opstruct.h",
+		"/home/leo/Documents/Projet Polytech/Space_Attack_v2/src/niveau.c",
+		"/home/leo/Documents/Projet Polytech/Space_Attack_v2/src/main.c",
+		"/home/leo/Documents/Projet Polytech/Space_Attack_v2/SpaceAttack.sublime-project",
+		"/home/leo/Documents/Projet Polytech/Space_Attack_v2/cmake/FindSDL2.cmake"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"~/Bureau/newSP/src",
+			"~/Bureau/newSP",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"en_box",
+			"SpaceAttack_Texture",
+			"mod",
+			"setEnemyBoundingBox",
+			"nb_box",
+			"printf",
+			"ptrFunction",
+			"updateBoundingBox",
+			"shp",
+			"en",
+			"updateBoundingBox",
+			"poly->",
+			"shp_box.",
+			"p_bbox2",
+			"p_bbox1",
+			"Polygone",
+			"rotateElement",
+			"rotate",
+			"shp_bbox1.",
+			"rotatePoint",
+			"p_bbox1.",
+			"shp",
+			"poly.",
+			"drawRectangle",
+			"shp_bbox2",
+			"+ ",
+			"drawGraphics",
+			"cleanGame",
+			"initGame",
+			"delay",
+			"drawGame",
+			"mainGameLoop",
+			"updateKey",
+			"loadGraphics",
+			"map",
+			"pl_fire",
+			"updateListMotion",
+			"extract",
+			"angle",
+			"create",
+			"SDL_Rect",
+			"getShip",
+			"spTexture",
+			"motionState",
+			"speed",
+			"getWidth",
+			"speedesse",
+			"suivant",
+			"vit",
+			"cleanGame",
+			"bmp"
+		],
+		"highlight": true,
+		"in_selection": true,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"fire_box",
+			"en",
+			"el->bbox.box[i].",
+			"shp_box->",
+			"shp_box.box[1]",
+			"shp_box.box[0]",
+			"rotatePoint",
+			"p->",
+			"rotateElement",
+			"p->",
+			"p",
+			"poly->",
+			"pl_enn",
+			"keyState",
+			"sp",
+			"next",
+			"speed"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 6,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 15523,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										190,
+										198
+									],
+									[
+										304,
+										312
+									],
+									[
+										476,
+										484
+									],
+									[
+										516,
+										524
+									],
+									[
+										702,
+										710
+									],
+									[
+										862,
+										870
+									],
+									[
+										915,
+										923
+									],
+									[
+										1017,
+										1025
+									],
+									[
+										1026,
+										1034
+									],
+									[
+										1280,
+										1288
+									],
+									[
+										1370,
+										1378
+									],
+									[
+										1625,
+										1633
+									],
+									[
+										1634,
+										1642
+									],
+									[
+										1793,
+										1801
+									],
+									[
+										1935,
+										1943
+									],
+									[
+										1976,
+										1984
+									],
+									[
+										2287,
+										2304
+									],
+									[
+										2428,
+										2445
+									],
+									[
+										2645,
+										2662
+									],
+									[
+										2987,
+										3004
+									],
+									[
+										3128,
+										3145
+									],
+									[
+										3345,
+										3362
+									],
+									[
+										3480,
+										3497
+									],
+									[
+										3815,
+										3826
+									],
+									[
+										3896,
+										3907
+									],
+									[
+										3950,
+										3961
+									],
+									[
+										4095,
+										4106
+									],
+									[
+										4340,
+										4346
+									],
+									[
+										4727,
+										4733
+									],
+									[
+										5013,
+										5019
+									],
+									[
+										5283,
+										5289
+									],
+									[
+										5457,
+										5463
+									],
+									[
+										5600,
+										5606
+									],
+									[
+										5667,
+										5673
+									],
+									[
+										5734,
+										5740
+									],
+									[
+										5801,
+										5807
+									],
+									[
+										5884,
+										5890
+									],
+									[
+										6088,
+										6094
+									],
+									[
+										6269,
+										6275
+									],
+									[
+										6475,
+										6481
+									],
+									[
+										6627,
+										6633
+									],
+									[
+										6699,
+										6705
+									],
+									[
+										6820,
+										6826
+									],
+									[
+										6921,
+										6927
+									],
+									[
+										7111,
+										7117
+									],
+									[
+										7252,
+										7258
+									],
+									[
+										7424,
+										7430
+									],
+									[
+										7565,
+										7571
+									],
+									[
+										7733,
+										7739
+									],
+									[
+										7966,
+										7972
+									],
+									[
+										8212,
+										8218
+									],
+									[
+										8418,
+										8424
+									],
+									[
+										8589,
+										8595
+									],
+									[
+										8754,
+										8760
+									],
+									[
+										8922,
+										8928
+									],
+									[
+										9113,
+										9119
+									],
+									[
+										9294,
+										9300
+									],
+									[
+										9451,
+										9457
+									],
+									[
+										9699,
+										9705
+									],
+									[
+										9873,
+										9879
+									],
+									[
+										10016,
+										10022
+									],
+									[
+										10083,
+										10089
+									],
+									[
+										10150,
+										10156
+									],
+									[
+										10217,
+										10223
+									],
+									[
+										10300,
+										10306
+									],
+									[
+										10504,
+										10510
+									],
+									[
+										10685,
+										10691
+									],
+									[
+										10891,
+										10897
+									],
+									[
+										11043,
+										11049
+									],
+									[
+										11115,
+										11121
+									],
+									[
+										11236,
+										11242
+									],
+									[
+										11337,
+										11343
+									],
+									[
+										11527,
+										11533
+									],
+									[
+										11668,
+										11674
+									],
+									[
+										11840,
+										11846
+									],
+									[
+										11981,
+										11987
+									],
+									[
+										12149,
+										12155
+									],
+									[
+										12382,
+										12388
+									],
+									[
+										12628,
+										12634
+									],
+									[
+										12834,
+										12840
+									],
+									[
+										13005,
+										13011
+									],
+									[
+										13170,
+										13176
+									],
+									[
+										13338,
+										13344
+									],
+									[
+										13529,
+										13535
+									],
+									[
+										13710,
+										13716
+									],
+									[
+										13867,
+										13873
+									],
+									[
+										14100,
+										14119
+									],
+									[
+										14259,
+										14278
+									],
+									[
+										14562,
+										14581
+									],
+									[
+										14879,
+										14882
+									],
+									[
+										15248,
+										15251
+									],
+									[
+										15440,
+										15443
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								14678,
+								14678
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 8,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ 	].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 8670.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "include/Common.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 815,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								626,
+								626
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "include/Prototypes.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 754,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								498,
+								498
+							]
+						],
+						"settings":
+						{
+							"auto_name": "#ifndef",
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/main.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 350,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								265,
+								265
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/opstruct.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1830,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								710,
+								710
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "include/opstruct.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1024,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								908,
+								908
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 221.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/Collision.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4860,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3948,
+								3948
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1402.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "include/Collision.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 385,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								114,
+								114
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/KeyboardMgt.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3819,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1206,
+								1206
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 501.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "include/KeyboardMgt.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 145,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								145,
+								145
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/GameMgt.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5253,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4875,
+								4875
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2769.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "include/GameMgt.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 487,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								83,
+								83
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "src/GraphicsMgt.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5871,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3675,
+								3675
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1674.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "include/GraphicsMgt.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 503,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								46,
+								46
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "sp.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 178.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
