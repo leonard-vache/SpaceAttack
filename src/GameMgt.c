@@ -146,8 +146,6 @@ void loadGame()
   Pelement newEnemy1 = create(spTxt.enemy1, r, ENEMY1_LINEAR_VELOCITY, ENEMY1_ANGULAR_VELOCITY, 0.0, NB_BOUNDING_BOX_ENEMY1, setEnemy1BoundingBox);
   //newEnemy1->bbox.init_bbox = setEnemy1BoundingBox;
   updateEnemy1List(add(getEnemy1List(),newEnemy1));
-
-  //setBoundingBox();
 }
 
 
@@ -185,22 +183,9 @@ void mainGameLoop(int frameLimit)
   {
     updateEventManager();
     updateListMotion(getFireList(),updateFireList);
-    Pelement pl_fire = getFireList();
-    while(pl_fire != NULL)
-    {
-      updateBoundingBox(pl_fire);
-      pl_fire = pl_fire->next;
-    }
     //enemy1Pattern();
     //updateListMotion(getEnemy1List(),updateEnemy1List);
-    updateBoundingBox(getShip());
-    Pelement pl_enn = getEnemy1List();
-    while(pl_enn != NULL)
-    {
-      updateBoundingBox(pl_enn);
-      pl_enn = pl_enn->next;
-    }
-    //setBoundingBox();
+    checkCollisions();
     drawGame();
     delay(frameLimit);
     frameLimit = SDL_GetTicks() + freq;

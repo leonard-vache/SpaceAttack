@@ -12,10 +12,9 @@ typedef struct SpaceAttack_Point
 {
   float x;
   float y;
-
 } SA_Point;
 
-typedef struct polygone 
+typedef struct Polygon 
 {
   SA_Point ul;   // Upper left
   SA_Point ur;   // Upper right
@@ -23,13 +22,13 @@ typedef struct polygone
   SA_Point br;   // Bottom right
   float width;
   float height;
-} Polygone;
+} Polygon;
 
 
 typedef struct boundingbox
 {
   unsigned short int nb_box;
-  Polygone *box;
+  Polygon *box;
   float previous_angle;
   //void (*init_bbox)(Pelement);
 } BoundingBox;
@@ -43,6 +42,12 @@ typedef struct element
   BoundingBox bbox;
 	Pelement next;
 } Element;
+
+
+SA_Point sum_SA_Point(SA_Point sa1, SA_Point sa2);
+Polygon *polygonsToWorld(Pelement el);
+
+SA_Point SDL_to_SA_Point(SDL_Point sdl_p);
 
 SDL_Point SA_Point_to_SDL(SA_Point sa_p);
 

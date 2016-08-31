@@ -2,8 +2,8 @@
 
 
 
-enum key { UP, DOWN, LEFT, RIGHT, SHOOT, NUM_KEY };
-static int keyState[NUM_KEY] = {0,0,0,0};
+enum key { UP, DOWN, LEFT, RIGHT, SHOOT, SLOW, NUM_KEY };
+static int keyState[NUM_KEY] = {0};
 
 
 void shooting()
@@ -76,6 +76,12 @@ void shipMove()
           shooting();
           break;
 
+        case SLOW :
+          shp->speed[0] = 2.f;
+          shp->speed[1] = 2.f;
+          printf("SLOW => speed = (%f,%f)\n", shp->speed[0], shp->speed[1]);
+          break;
+
         default :
           printf("Error unknown motion\n");
           stopGame();
@@ -109,9 +115,12 @@ void updateKey()
             keyState[SHOOT] = 1;
             break;
 
+          case SDLK_RSHIFT:
+            keyState[SLOW] = 1;
+            break;
+
           case SDLK_UP:
-              keyState[UP] = 1;
-              //shipMove(UP);
+            keyState[UP] = 1;
             break;
 
           case SDLK_DOWN:
@@ -142,6 +151,10 @@ void updateKey()
 
           case SDLK_SPACE:
             keyState[SHOOT] = 0;
+            break;
+
+          case SDLK_RSHIFT:
+            keyState[SLOW] = 0;
             break;
 
           case SDLK_UP: 

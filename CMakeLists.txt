@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(SpaceAttack)
 
+set(CMAKE_REQUIRED_FLAGS -g)
 
 # Redirige la sortie de l'éxécutable dans le dossier bin
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})

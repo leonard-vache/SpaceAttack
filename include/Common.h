@@ -3,6 +3,7 @@
 
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <SDL.h>
 
 #include "opstruct.h"
@@ -21,6 +22,7 @@
 #define ENEMY1_FIRE_SPEED 18
 #define ENEMY1_ANGULAR_VELOCITY 5  // Express in pixel per frame, to adapt ...
 #define ENEMY1_LINEAR_VELOCITY 4
+
 
 typedef struct spaceatack_texture 
 {

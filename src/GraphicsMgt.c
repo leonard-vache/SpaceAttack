@@ -74,7 +74,7 @@ void loadGraphics(void)
 }
 
 
-void drawPolygone(Polygone *poly)
+void drawPolygon(Polygon *poly)
 {
   SDL_RenderDrawLine(getRenderer(),poly->ul.x, poly->ul.y, poly->ur.x, poly->ur.y);
   SDL_RenderDrawLine(getRenderer(),poly->ur.x, poly->ur.y, poly->br.x, poly->br.y);
