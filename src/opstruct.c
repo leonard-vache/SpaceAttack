@@ -31,7 +31,7 @@ void SA_Point_to_SDL_World(SA_Point *sa_p, SDL_Rect sdl_r)
 {
 
   sa_p->x += (float)sdl_r.x;
-  sa_p->y = (float)sdl_r.y - sa_p->y;
+  sa_p->y = (float)sdl_r.y + sa_p->y;
 }
 
 SDL_Point SA_Point_to_SDL(SA_Point sa_p)

@@ -89,20 +89,31 @@ void drawBBox(Pelement el)
   int ey = el->pos.y;
   int i;
 
-  //printf("nb bbox = %d\n",el->bbox.nb_box);
+  Polygon *poly_el = polygonsToWorld(el);
+
   for(i = 0; i < el->bbox.nb_box; i++)
   {
-    SDL_Point ul = SA_Point_to_SDL(el->bbox.box[i].ul);
-    SDL_Point ur = SA_Point_to_SDL(el->bbox.box[i].ur);
-    SDL_Point bl = SA_Point_to_SDL(el->bbox.box[i].bl);
-    SDL_Point br = SA_Point_to_SDL(el->bbox.box[i].br);
+
+    SDL_Point ul = SA_Point_to_SDL(poly_el[i].ul);
+    SDL_Point ur = SA_Point_to_SDL(poly_el[i].ur);
+    SDL_Point bl = SA_Point_to_SDL(poly_el[i].bl);
+    SDL_Point br = SA_Point_to_SDL(poly_el[i].br);
+
+    SDL_RenderDrawLine(getRenderer(),ul.x, ul.y, ur.x, ur.y);
+    SDL_RenderDrawLine(getRenderer(),ur.x, ur.y, br.x, br.y);
+    SDL_RenderDrawLine(getRenderer(),br.x, br.y, bl.x, bl.y);
+    SDL_RenderDrawLine(getRenderer(),bl.x, bl.y, ul.x, ul.y);
 
     //printf("pos=(%d,%d) ul=(%d,%d) ur=(%d,%d) bl=(%d,%d) br=(%d,%d)\n",ex,ey, ul.x, ul.y, ur.x, ur.y, bl.x, bl.y, br.x, br.y);
+    /*
     SDL_RenderDrawLine(getRenderer(),ul.x + ex, ul.y + ey, ur.x + ex, ur.y + ey);
     SDL_RenderDrawLine(getRenderer(),ur.x + ex, ur.y + ey, br.x + ex, br.y + ey);
     SDL_RenderDrawLine(getRenderer(),br.x + ex, br.y + ey, bl.x + ex, bl.y + ey);
     SDL_RenderDrawLine(getRenderer(),bl.x + ex, bl.y + ey, ul.x + ex, ul.y + ey);
+    */
   }
+
+  free(poly_el);
 }
 
 

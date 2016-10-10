@@ -135,15 +135,10 @@ void rotatePoint(SA_Point *p, float theta)
 
 void rotatePolygon(Polygon *poly, float delta_angle)
 {  
-  //printf("Before rotation : "); 
-  //printPolygon(*poly);
   rotatePoint(&(poly->ul), delta_angle);
   rotatePoint(&(poly->ur), delta_angle);
   rotatePoint(&(poly->bl), delta_angle);
   rotatePoint(&(poly->br), delta_angle);
-  //printf("After rotation : "); 
-  //printPolygon(*poly);
-  //printf("-----------------------------------------------------------------\n");
 }
 
 void printPolygon(Polygon poly)
@@ -215,10 +210,9 @@ bool isPolygonsCollision(Polygon p1, Polygon p2)
       float cross_product2 = vector_cote_poly.x * vector_to_test.y - vector_cote_poly.y * vector_to_test.x;
 
       // Si au moins un point se trouve à gauche => en dehors du polygone => pas de collisions 
-      //printf("cross_product2 = %f\n",cross_product2);
-      if (cross_product2 >= 0)
+      if (cross_product2 <= 0)
       {
-        printf("///////// break2 /////////\n");
+        //printf("///////// break2 /////////\n");
         break;
       }
     }
@@ -235,10 +229,9 @@ bool isPolygonsCollision(Polygon p1, Polygon p2)
 }
 
 
-
 bool isPolygonCollision(Polygon p1, Polygon p2)
 {
-
+  
 }
 
 
@@ -280,11 +273,13 @@ bool isElementsCollision(Pelement el1, Pelement el2)
   return false;
 }
 
+
 void moveElementOutOfRange(Pelement el)
 {
   el->pos.x = 2.f * SCREEN_WIDTH;
   el->pos.y = 2.f * SCREEN_HEIGHT;
 }
+
 
 void checkCollisions()
 { 
