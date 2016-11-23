@@ -7,8 +7,10 @@ set(CMAKE_REQUIRED_FLAGS -g)
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 
 # Inclusion de la SDL2 a la main
-#set(SDL2_INCLUDE_DIR /usr/include/SDL2)
+#set(SDL2_INCLUDE_DIR /usr/include/SDL2
 #set(SDL2_LIBRARY /usr/lib/libSDL2.so)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -ggdb")
+
 
 message("source du projet par defaut : ${SpaceAttack_SOURCE_DIR}")
 #message("binaire du projet par defaut: ${SpaceAttack_SOURCE_DIR}")

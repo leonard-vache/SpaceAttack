@@ -5,13 +5,24 @@
 #include "Prototypes.h"
 
 
-#define P_BACKGROUND "./images/map.bmp"
-#define P_SHIP "./images/ship.bmp"
-#define P_SHIP_FIRE "./images/missilevex.bmp"
-#define P_ENEMY1 "./images/enemy1.bmp"
-#define BOSS_LIFE "./images/vieboss.bmp"
+#define P_BACKGROUND  "./images/map.bmp"
+#define P_SHIP        "./images/ship.bmp"
+#define P_SHIP_FIRE   "./images/missilevex.bmp"
+#define P_ENEMY1      "./images/enemy1.bmp"
+#define P_EXPLOSION   "./images/expl"
+#define BOSS_LIFE     "./images/vieboss.bmp"
 
-#define ANGLE_OFFSET 90
+#define ANGLE_OFFSET        90
+#define EXPLOSION_FREQUENCY 10
+
+typedef struct explosion
+{
+  SDL_Rect pos;
+  int previous_tick;
+  int collision_id;
+
+  struct explosion *next;
+} Explosion;
 
 
 SDL_Texture *loadImage(char *img_path);

@@ -189,6 +189,7 @@ void mainGameLoop(int frameLimit)
     drawGame();
     delay(frameLimit);
     frameLimit = SDL_GetTicks() + freq;
+    printf("Current Tick : %d\n",SDL_GetTicks());
   }
 }
 
@@ -205,6 +206,7 @@ void cleanGame()
   renderer = NULL;
   SDL_DestroyWindow(screen);
   screen = NULL;
+  printf("Renderer & Window destroyed\n");
 
   SDL_Quit();
 }

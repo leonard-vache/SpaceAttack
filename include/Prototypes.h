@@ -28,6 +28,7 @@ extern void updateEnemy1List(Pelement l);
 // GraphicsMgt
 extern SpaceAttack_Texture getSPTexture(void);
 extern Pelement getShip(void);
+extern void RequestExplosion(SDL_Rect position);
 //extern void loadGraphics(void);
 //extern void drawGraphics(void);
 //extern void cleanGraphics(void);

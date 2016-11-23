@@ -163,11 +163,8 @@ void updateBoundingBox(Pelement el)
 bool isPolygonsCollision(Polygon p1, Polygon p2)
 {
   // Y vers le bas => Repère indirect => on tourne dans l'autre sens
-  // S un point est à droite de tous les cotes du polygone => interieur du polgone => collision 
   SA_Point p1_t[NB_POINTS_POLYGON] = { p1.ul, p1.ur, p1.br, p1.bl};
   SA_Point p2_t[NB_POINTS_POLYGON+1] = { p2.ul, p2.ur, p2.br, p2.bl, p2.ul};
-
-  //printf("isPolygonsCollision init");
 
   int i, j;
   SA_Point vector_cote_poly, vector_to_test;
@@ -177,29 +174,7 @@ bool isPolygonsCollision(Polygon p1, Polygon p2)
     // Boucles sur les points du polygone (+ 1 pour lier le premier et le dernier coté du polygone)
     for (j = 0; j < NB_POINTS_POLYGON; j++)
     {
-      /*
-      //printf("isPolygonsCollision i = %d   j = %d\n",i,j);
       // Vecteur reliant 2 points consécutifs du polygone
-      vector_cote_poly.x = p1_t[j+1].x - p1_t[j].x;
-      vector_cote_poly.y = p1_t[j+1].y - p1_t[j].y;
-      
-      // Vecteur vers le point à tester
-      vector_to_test.x = p2_t[i].x - p1_t[j].x;
-      vector_to_test.y = p2_t[i].y - p1_t[j].y;
-
-      float cross_product = vector_cote_poly.x * vector_to_test.y - vector_cote_poly.y * vector_to_test.x;
-
-      // Si au moins un point se trouve à gauche => en dehors du polygone => pas de collisions 
-      //printf("cross_product = %f\n",cross_product);
-      if (cross_product >= 0)
-      {
-        //printf("///////// break /////////\n");
-        //return false;
-        break;
-      }
-      */
-      
-     
       vector_cote_poly.x = p2_t[j+1].x - p2_t[j].x;
       vector_cote_poly.y = p2_t[j+1].y - p2_t[j].y;
       
@@ -212,26 +187,16 @@ bool isPolygonsCollision(Polygon p1, Polygon p2)
       // Si au moins un point se trouve à gauche => en dehors du polygone => pas de collisions 
       if (cross_product2 <= 0)
       {
-        //printf("///////// break2 /////////\n");
         break;
       }
     }
-    printf("j == %d \\ %d \n",j,NB_POINTS_POLYGON);
     if (j == NB_POINTS_POLYGON)
     {
-      printf("///////// YES /////////\n");
-      //printf("Collision\n");
+      printf("Collision\n");
       return true;
     }
   }
-  //printf("///////// NO /////////\n");
   return false;
-}
-
-
-bool isPolygonCollision(Polygon p1, Polygon p2)
-{
-  
 }
 
 
@@ -248,11 +213,7 @@ bool isElementsCollision(Pelement el1, Pelement el2)
 
   //printf("In %s pre check passed\n",__FUNCTION__);
   Polygon *poly_el1 = polygonsToWorld(el1);
-  Polygon *poly_el2 = polygonsToWorld(el2);
-
-  printf("el1->bbox.nb_box = %d\n",el1->bbox.nb_box);
-  printf("el2->bbox.nb_box = %d\n",el2->bbox.nb_box);
-  
+  Polygon *poly_el2 = polygonsToWorld(el2);  
   
   int i,j;
   for (i = 0; i < el1->bbox.nb_box; i++)
@@ -303,8 +264,12 @@ void checkCollisions()
       compt++;
       updateBoundingBox(pl_enn);
       //Check collision between ship and enemy
-      if(isElementsCollision(pl_enn, getShip()))
+      if( isElementsCollision(pl_enn, getShip()) )
+      {
         printf("Collision enemy avec ship\n");
+        moveElementOutOfRange(pl_enn);
+        break;
+      }
       // Check Collison entre ennemy and missile
       pl_fire = getFireList();
       while(pl_fire != NULL)
@@ -312,6 +277,7 @@ void checkCollisions()
         if(isElementsCollision(pl_fire, pl_enn))
         {
           printf("Collision enemy avec missile\n");
+          RequestExplosion(pl_enn->pos);
           moveElementOutOfRange(pl_enn);
           moveElementOutOfRange(pl_fire);
           break;

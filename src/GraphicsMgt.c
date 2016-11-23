@@ -1,6 +1,12 @@
 #include "GraphicsMgt.h"
+#include <unistd.h>
 
 SpaceAttack_Texture spTexture;
+
+static Explosion *explosionListe = NULL;
+
+Explosion *getExplosionList() { return explosionListe; }
+void updateExplosionList(Explosion *ex) { explosionListe = ex; }
 
 SpaceAttack_Texture getSPTexture() { return spTexture; }
 
@@ -64,13 +70,21 @@ SDL_Texture *loadImageAlpha(char *img_path, int r, int g, int b)
   return texture; 
 }
 
+
 void loadGraphics(void)
 {
   spTexture.background = loadImage(P_BACKGROUND);
-  spTexture.ship = loadImageAlpha(P_SHIP,255,0,255);
-  spTexture.shipFire = loadImageAlpha(P_SHIP_FIRE,0,0,0);
-  spTexture.enemy1 = loadImageAlpha(P_ENEMY1,0,0,0);
-  spTexture.bossLife = loadImageAlpha(BOSS_LIFE,0,0,0);
+  spTexture.ship       = loadImageAlpha(P_SHIP,255,0,255);
+  spTexture.shipFire   = loadImageAlpha(P_SHIP_FIRE,0,0,0);
+  spTexture.enemy1     = loadImageAlpha(P_ENEMY1,0,0,0);
+  spTexture.bossLife   = loadImageAlpha(BOSS_LIFE,0,0,0);
+  int i;
+  for(i = 1; i <= NB_EXPLOSION; i++ )
+  {
+    char expl_path[256];
+    sprintf(expl_path,"%s%i.bmp",P_EXPLOSION,i);
+    spTexture.explosions[i-1] = loadImageAlpha(expl_path,0,0,0);
+  } 
 }
 
 
@@ -91,29 +105,102 @@ void drawBBox(Pelement el)
 
   Polygon *poly_el = polygonsToWorld(el);
 
+  //printf("nb bbox = %d\n",el->bbox.nb_box);
   for(i = 0; i < el->bbox.nb_box; i++)
   {
+    SDL_RenderDrawLine(getRenderer(),poly_el[i].ul.x, poly_el[i].ul.y, poly_el[i].ur.x, poly_el[i].ur.y);
+    SDL_RenderDrawLine(getRenderer(),poly_el[i].ur.x, poly_el[i].ur.y, poly_el[i].br.x, poly_el[i].br.y);
+    SDL_RenderDrawLine(getRenderer(),poly_el[i].br.x, poly_el[i].br.y, poly_el[i].bl.x, poly_el[i].bl.y);
+    SDL_RenderDrawLine(getRenderer(),poly_el[i].bl.x, poly_el[i].bl.y, poly_el[i].ul.x, poly_el[i].ul.y);
+  }
+}
 
-    SDL_Point ul = SA_Point_to_SDL(poly_el[i].ul);
-    SDL_Point ur = SA_Point_to_SDL(poly_el[i].ur);
-    SDL_Point bl = SA_Point_to_SDL(poly_el[i].bl);
-    SDL_Point br = SA_Point_to_SDL(poly_el[i].br);
+void RequestExplosion(SDL_Rect position)
+{
+  // Creation of an explosion element
+  Explosion *ex;
+  ex = malloc(sizeof(Explosion));
+ 
+  ex->pos = position;
+  ex->previous_tick = 0;
+  ex->collision_id = 0;  
+  //ex->next = NULL;
 
-    SDL_RenderDrawLine(getRenderer(),ul.x, ul.y, ur.x, ur.y);
-    SDL_RenderDrawLine(getRenderer(),ur.x, ur.y, br.x, br.y);
-    SDL_RenderDrawLine(getRenderer(),br.x, br.y, bl.x, bl.y);
-    SDL_RenderDrawLine(getRenderer(),bl.x, bl.y, ul.x, ul.y);
+  // Add it at the beginning of list
+  ex->next = getExplosionList();
+  updateExplosionList(ex);
+  // Find last elemen from list
+  /*while ( pl_explosion->next != NULL )
+  {
+    pl_explosion = pl_explosion->next;
+  }
+  pl_explosion->next = &ex;*/
+}
 
-    //printf("pos=(%d,%d) ul=(%d,%d) ur=(%d,%d) bl=(%d,%d) br=(%d,%d)\n",ex,ey, ul.x, ul.y, ur.x, ur.y, bl.x, bl.y, br.x, br.y);
-    /*
-    SDL_RenderDrawLine(getRenderer(),ul.x + ex, ul.y + ey, ur.x + ex, ur.y + ey);
-    SDL_RenderDrawLine(getRenderer(),ur.x + ex, ur.y + ey, br.x + ex, br.y + ey);
-    SDL_RenderDrawLine(getRenderer(),br.x + ex, br.y + ey, bl.x + ex, bl.y + ey);
-    SDL_RenderDrawLine(getRenderer(),bl.x + ex, bl.y + ey, ul.x + ex, ul.y + ey);
-    */
+void EndExplosion(Explosion *ex)
+{
+  Explosion *pl_ex = getExplosionList();
+  if (pl_ex == ex )
+  {
+    updateExplosionList(pl_ex->next);
+    return;
   }
 
-  free(poly_el);
+  while ( pl_ex->next != NULL )
+  {
+    if ( pl_ex->next == ex )
+    {
+      pl_ex->next == ex->next; // Raccordement
+      free(pl_ex);
+      break;
+    }
+    pl_ex = pl_ex->next;
+  }
+}
+
+
+void drawExplosion ()
+{
+  Explosion *pl_ex = getExplosionList();
+  if ( NULL == pl_ex )
+    return;
+
+  while ( pl_ex != NULL )
+  {
+
+    int tick = SDL_GetTicks();
+    printf("Explosion tick : %d\n",tick);
+
+    if ( SDL_GetTicks() - pl_ex->previous_tick > EXPLOSION_FREQUENCY )
+    {
+      printf("Explosion tjrs ok\n");
+
+      SDL_Rect texture_ex = pl_ex->pos;
+      SDL_QueryTexture(spTexture.explosions[pl_ex->collision_id], NULL, NULL, &texture_ex.w, &texture_ex.h);
+      
+      SDL_Point center;
+      center.x = texture_ex.w / 2;
+      center.y = texture_ex.h / 2;
+
+      if (SDL_RenderCopyEx(getRenderer(),spTexture.explosions[pl_ex->collision_id],NULL,&texture_ex,90,&center,SDL_FLIP_NONE) < 0)
+      {
+        printf("Error while drawing explosion. SDL Error : %s\n", SDL_GetError());
+        return;
+      }
+
+      pl_ex->previous_tick = SDL_GetTicks();
+      pl_ex->collision_id ++;
+    }
+    
+    if ( NB_EXPLOSION == pl_ex->collision_id  )
+    {
+      EndExplosion(pl_ex);
+    }
+    pl_ex = pl_ex->next;
+
+
+  }
+
 }
 
 
@@ -140,6 +227,7 @@ void drawGraphics(void)
   // Draw gamer ship
   drawElement(getShip());
   drawBBox(getShip());
+  drawExplosion();
   // Set red render for Bounding box dsplay
   SDL_SetRenderDrawColor(getRenderer(), 255, 0, 0, 255);
 }
@@ -171,7 +259,7 @@ void drawElement(Pelement el)
 
   if (SDL_RenderCopyEx(getRenderer(),el->txt,NULL,&texture_pos,round(el->angle)+90,&center,SDL_FLIP_NONE) < 0)
   {
-    printf("Error when rotate on left. SDL Error : %s\n", SDL_GetError());
+    printf("Error while drawing element. SDL Error : %s\n", SDL_GetError());
     stopGame();
     return;
   }

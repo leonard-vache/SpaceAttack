@@ -15,6 +15,8 @@ void shooting()
   {
     Pelement shp = getShip();
     Pelement newMissile = create(getSPTexture().shipFire,shp->pos,SHIP_FIRE_SPEED,0,shp->angle,NB_BOUNDING_BOX_FIRE_SHIP, setShipFireBoundingBox);
+    // add returns pointer to new linked list with added element
+    // update sets FireList pointer to list returned by add function
     updateFireList(add(getFireList(),newMissile));
     previous_ticks = SDL_GetTicks();
   }
