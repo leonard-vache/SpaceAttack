@@ -1,4 +1,26 @@
-#include "opstruct.h"
+#include "Element.h"
+
+// Game Objects
+static Pelement map = NULL;
+static Pelement ship = NULL;
+static Pelement fireList = NULL;
+static Pelement enemy1List = NULL;
+
+//int adaptToFPS(float value) { return 60 / (round(60.0 * FPS / value) / FPS); }
+
+Pelement getMap() { return map; }
+void updateMap(Pelement mp) { map = mp; }
+
+Pelement getShip() { return ship; }
+void updateShip(Pelement sh) { ship = sh; }
+
+Pelement getFireList() { return fireList; }
+void updateFireList(Pelement fl) { fireList = fl; }
+
+Pelement getEnemy1List() { return enemy1List; }
+void updateEnemy1List(Pelement el) { enemy1List = el; }
+
+
 
 SA_Point sum_SA_Point(SA_Point sa1, SA_Point sa2)
 {
@@ -70,7 +92,7 @@ Polygon *polygonsToWorld(Pelement el)
 }
 
 // Création + Initialisation d'un élément
-Pelement create(SDL_Texture *t, SDL_Rect p, int v, int w, float angle, unsigned short int nb_box, 
+Pelement createElement(SpaceAttack_te_texture txt_id, SDL_Rect p, int v, int w, double angle, unsigned short int nb_box, 
   ptrFunction setBBox)
 { 
 	Pelement el;
@@ -82,23 +104,21 @@ Pelement create(SDL_Texture *t, SDL_Rect p, int v, int w, float angle, unsigned 
     stopGame();
     return;
   }    
-  el->txt = t;
+  el->texture_id = txt_id;
+  //el->txt = t;
   el->speed[0] = v;
   el->speed[1] = w;
   el->angle = angle;
 
-
-  if(SDL_QueryTexture(t, NULL, NULL, &(el->pos.w), &(el->pos.h)) < 0) 
-  {
-    printf("Can not get texture dimension ! SDL_Error : %s", SDL_GetError());
-    stopGame();
-  }
+  // Fill heigth and width field from texture
+  getTextureDimension(txt_id, &(el->pos) );
   el->pos.x = p.x;
   el->pos.y = p.y;
 
   el->bbox.nb_box = nb_box;
   el->bbox.box = (Polygon*)malloc(nb_box * sizeof(Polygon));
   el->bbox.previous_angle = -90.0;
+  // Initialize Bounding Box
   setBBox(el);
   //el->bbox.init_bbox = setBBox;
   
@@ -108,7 +128,7 @@ Pelement create(SDL_Texture *t, SDL_Rect p, int v, int w, float angle, unsigned 
 
 
 
-Pelement add(Pelement pliste, Pelement el){ // Ajout de l'élément au début de la liste
+Pelement addElement(Pelement pliste, Pelement el){ // Ajout de l'élément au début de la liste
 	    
   if (pliste == NULL && el == NULL)
   {
@@ -151,17 +171,20 @@ Pelement extract(Pelement pliste, Pelement el){ // Extraction d'un élément d'u
 }
 
 
+void deleteElement(Pelement el)
+{
+    free(el->bbox.box);
+    free(el);
+}
 
-void delete_all(Pelement pliste) // Suppression de la liste entière
+void deleteListOfElement(Pelement pliste) // Suppression de la liste entière
 { 
 	Pelement p = pliste, pel = NULL;
 	while(p != NULL)
   {
 		pel = p;
 		p = p->next;
-    //unsigned short int i;
-    //for(i = 0; i < pel->bbox.nb_box; i++)
-    free(pel->bbox.box);
-		free(pel);
+
+    deleteElement(pel);
 	}
 }

@@ -139,6 +139,30 @@ src/Collision.c.s:
 	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Collision.c.s
 .PHONY : src/Collision.c.s
 
+src/Element.o: src/Element.c.o
+.PHONY : src/Element.o
+
+# target to build an object file
+src/Element.c.o:
+	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Element.c.o
+.PHONY : src/Element.c.o
+
+src/Element.i: src/Element.c.i
+.PHONY : src/Element.i
+
+# target to preprocess a source file
+src/Element.c.i:
+	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Element.c.i
+.PHONY : src/Element.c.i
+
+src/Element.s: src/Element.c.s
+.PHONY : src/Element.s
+
+# target to generate assembly for a file
+src/Element.c.s:
+	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Element.c.s
+.PHONY : src/Element.c.s
+
 src/GameMgt.o: src/GameMgt.c.o
 .PHONY : src/GameMgt.o
 
@@ -235,30 +259,6 @@ src/main.c.s:
 	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/main.c.s
 .PHONY : src/main.c.s
 
-src/opstruct.o: src/opstruct.c.o
-.PHONY : src/opstruct.o
-
-# target to build an object file
-src/opstruct.c.o:
-	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/opstruct.c.o
-.PHONY : src/opstruct.c.o
-
-src/opstruct.i: src/opstruct.c.i
-.PHONY : src/opstruct.i
-
-# target to preprocess a source file
-src/opstruct.c.i:
-	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/opstruct.c.i
-.PHONY : src/opstruct.c.i
-
-src/opstruct.s: src/opstruct.c.s
-.PHONY : src/opstruct.s
-
-# target to generate assembly for a file
-src/opstruct.c.s:
-	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/opstruct.c.s
-.PHONY : src/opstruct.c.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -271,6 +271,9 @@ help:
 	@echo "... src/Collision.o"
 	@echo "... src/Collision.i"
 	@echo "... src/Collision.s"
+	@echo "... src/Element.o"
+	@echo "... src/Element.i"
+	@echo "... src/Element.s"
 	@echo "... src/GameMgt.o"
 	@echo "... src/GameMgt.i"
 	@echo "... src/GameMgt.s"
@@ -283,9 +286,6 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/opstruct.o"
-	@echo "... src/opstruct.i"
-	@echo "... src/opstruct.s"
 .PHONY : help
 
 

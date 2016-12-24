@@ -2,15 +2,14 @@
 #define COLLISION_H
 
 #include "Common.h"
-#include "Prototypes.h"
+#include "Element.h"
 
-#define NB_BOUNDING_BOX_SHIP 2
-#define NB_BOUNDING_BOX_ENEMY1 2
+#define NB_BOUNDING_BOX_SHIP      2
+#define NB_BOUNDING_BOX_ENEMY1    2
 #define NB_BOUNDING_BOX_FIRE_SHIP 1
-#define NB_BOUNDING_BOX_MAP 0
+#define NB_BOUNDING_BOX_MAP       0
 
-#define NB_POINTS_POLYGON 4
-
+#define NB_POINTS_POLYGON         4
 
 
 void setMapBoundingBox(Pelement map);

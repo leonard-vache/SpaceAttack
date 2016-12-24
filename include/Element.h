@@ -1,18 +1,16 @@
-#ifndef OPSTRUCT_H
-#define OPSTRUCT_H
+#ifndef ELEMENT_H
+#define ELEMENT_H
 
-#include <SDL.h>
+#include "Common.h"
+#include "GraphicsMgt.h"
 
 typedef struct element *Pelement;
+
 // Pointeur sur fonction update**ListMotion ou set**BoundingBox. 
 // Toutes les fonctions qui retourne void + prenne en argument Pelement
 typedef void (*ptrFunction)(Pelement);
  
-typedef struct SpaceAttack_Point
-{
-  float x;
-  float y;
-} SA_Point;
+
 
 typedef struct Polygon 
 {
@@ -33,31 +31,45 @@ typedef struct boundingbox
   //void (*init_bbox)(Pelement);
 } BoundingBox;
 
+
 typedef struct element 
 {
-	SDL_Texture *txt;				// type de missile/vaisseau
-	float speed[2];         // vecteur Vitesse : speed[0] = v   speed[1] = w
+  SpaceAttack_te_texture texture_id;  // Texture element representation
+	float speed[2];                     // vecteur Vitesse : speed[0] = v (lineaire)   speed[1] = w (angulaire)
   SDL_Rect pos;
-  float angle;
+  double angle;
   BoundingBox bbox;
 	Pelement next;
 } Element;
 
 
-SA_Point sum_SA_Point(SA_Point sa1, SA_Point sa2);
+
+extern Pelement getMap();
+extern void updateMap(Pelement mp);
+
+extern Pelement getShip();
+extern void updateShip(Pelement sh);
+
+extern Pelement getFireList();
+extern void updateFireList(Pelement fl);
+
+extern Pelement getEnemy1List();
+extern void updateEnemy1List(Pelement el);
+
+
 Polygon *polygonsToWorld(Pelement el);
 
 SA_Point SDL_to_SA_Point(SDL_Point sdl_p);
 
 SDL_Point SA_Point_to_SDL(SA_Point sa_p);
 
-Pelement create(SDL_Texture *t, SDL_Rect p, int v, int w, float angle, unsigned short int nb_box, 
+Pelement createElement(SpaceAttack_te_texture txt_id, SDL_Rect p, int v, int w, double angle, unsigned short int nb_box, 
   ptrFunction setBBox);
 
-Pelement add(Pelement pliste, Pelement el);
+Pelement addElement(Pelement pliste, Pelement el);
 
 Pelement extract(Pelement pliste, Pelement el);
 
-void delete_all(Pelement pliste);
+void deleteListOfElement(Pelement pliste);
 
 #endif

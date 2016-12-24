@@ -2,8 +2,7 @@
 #define GRAPHICS_MGT_h
 
 #include "Common.h"
-#include "Prototypes.h"
-
+//#include "Collision.h"
 
 #define P_BACKGROUND  "./images/map.bmp"
 #define P_SHIP        "./images/ship.bmp"
@@ -13,22 +12,37 @@
 #define BOSS_LIFE     "./images/vieboss.bmp"
 
 #define ANGLE_OFFSET        90
-#define EXPLOSION_FREQUENCY 10
 
-typedef struct explosion
+#define NB_EXPLOSION        16 
+#define EXPLOSION_FREQUENCY 20
+
+
+
+typedef struct sp_texture
 {
-  SDL_Rect pos;
-  int previous_tick;
-  int collision_id;
+  SDL_Texture *texture;
+  int angular_offset;
+} SP_Texture;
 
-  struct explosion *next;
-} Explosion;
+ 
+typedef enum SA_te_texture
+{
+  E_TEXT_BACKGROUND,
+  E_TEXT_SHIP,
+  E_TEXT_SHIP_FIRE,
+  E_TEXT_ENEMY1,
+  E_TEXT_EXPLOSION,
+  E_TEXT_BOSS_LIFE = NB_EXPLOSION + E_TEXT_EXPLOSION, 
+  E_TEXT_NB
+} SpaceAttack_te_texture;
 
 
 SDL_Texture *loadImage(char *img_path);
 SDL_Texture *loadImageAlpha(char *img_path, int r, int g, int b);
 void cleanGraphics(void);
-void drawElement(Pelement el);
-void drawTexture(SDL_Texture *image, int x, int y, int angle);
+//void drawElement(Pelement el);
+void drawSATexture(SpaceAttack_te_texture txt_id, SDL_Rect pos, double angle);
+void drawPolygon(SA_Point ul, SA_Point ur, SA_Point br, SA_Point bl);
+//static void drawTexture(SDL_Texture *image, int x, int y, int angle);
 
 #endif

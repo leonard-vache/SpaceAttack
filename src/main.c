@@ -1,11 +1,9 @@
 #include "Common.h"
-#include "Prototypes.h"
-//#include <SDL_image.h>
-
+#include "Prototypes.h" 
 
 int main(int argc, char *argv[])
 {
-  unsigned int frameLimit = SDL_GetTicks() + 1000 / FPS;
+  unsigned int frameLimit = 1000 / FPS;
   srand(time(NULL));
   //atexit(cleanGame);
 

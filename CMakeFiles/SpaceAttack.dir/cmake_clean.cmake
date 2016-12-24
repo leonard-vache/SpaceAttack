@@ -1,9 +1,9 @@
 file(REMOVE_RECURSE
   "CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o"
+  "CMakeFiles/SpaceAttack.dir/src/Element.c.o"
   "CMakeFiles/SpaceAttack.dir/src/main.c.o"
   "CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o"
   "CMakeFiles/SpaceAttack.dir/src/Collision.c.o"
-  "CMakeFiles/SpaceAttack.dir/src/opstruct.c.o"
   "CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o"
   "bin/SpaceAttack.pdb"
   "bin/SpaceAttack"

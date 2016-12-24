@@ -3,15 +3,17 @@
 
 SDL_Window* screen = NULL;
 SDL_Renderer* renderer = NULL;
+/*
 Pelement map = NULL;
 Pelement ship = NULL;
 Pelement fireList = NULL;
 Pelement enemy1List = NULL;
+*/
 int go = 1;
 
 
 //int adaptToFPS(float value) { return 60 / (round(60.0 * FPS / value) / FPS); }
-
+/*
 Pelement getMap() { return map; }
 
 Pelement getFireList() { return fireList; }
@@ -21,6 +23,7 @@ Pelement getEnemy1List() { return enemy1List; }
 void updateEnemy1List(Pelement l) { enemy1List = l; }
 
 Pelement getShip() { return ship; }
+*/
 
 void stopGame() { go = 0; }
 
@@ -49,6 +52,7 @@ int initGame()
 
   return 1;
 }
+
 
 void updateListMotion(Pelement pl, ptrFunction updateList)
 {
@@ -129,23 +133,26 @@ void enemy1Pattern()
 
 void loadGame() 
 {
-  SpaceAttack_Texture spTxt = getSPTexture();
   SDL_Rect r;
 
   r.x = SCREEN_WIDTH / 2;
   r.y = SCREEN_HEIGHT / 2;
-  map = create(spTxt.background, r, 0, 0, -90.0, NB_BOUNDING_BOX_MAP, setMapBoundingBox);
+  updateMap( createElement(E_TEXT_BACKGROUND, r, 0, 0, -90.0, NB_BOUNDING_BOX_MAP, setMapBoundingBox) );
+
+  Pelement map2 = getMap();
+  if (map2 == NULL)
+    printf("Map NULL !!!\n");
 
   r.x = 300;
   r.y = 600;
-  ship = create(spTxt.ship, r, SHIP_LINEAR_VELOCITY, SHIP_ANGULAR_VELOCITY, -90.0, NB_BOUNDING_BOX_SHIP, setShipBoundingBox);
+  updateShip( createElement(E_TEXT_SHIP, r, SHIP_LINEAR_VELOCITY, SHIP_ANGULAR_VELOCITY, -90.0, NB_BOUNDING_BOX_SHIP, setShipBoundingBox) );
   //ship->bbox.init_bbox = setShipBoundingBox;
 
   r.x = 300;
   r.y = 30;
-  Pelement newEnemy1 = create(spTxt.enemy1, r, ENEMY1_LINEAR_VELOCITY, ENEMY1_ANGULAR_VELOCITY, 0.0, NB_BOUNDING_BOX_ENEMY1, setEnemy1BoundingBox);
+  Pelement newEnemy1 = createElement(E_TEXT_ENEMY1, r, ENEMY1_LINEAR_VELOCITY, ENEMY1_ANGULAR_VELOCITY, 90.0, NB_BOUNDING_BOX_ENEMY1, setEnemy1BoundingBox);
   //newEnemy1->bbox.init_bbox = setEnemy1BoundingBox;
-  updateEnemy1List(add(getEnemy1List(),newEnemy1));
+  updateEnemy1List(addElement(getEnemy1List(),newEnemy1));
 }
 
 
@@ -155,41 +162,88 @@ void delay(unsigned int frameLimit)
   unsigned int ticks = SDL_GetTicks();
   unsigned int freq = 1000 / FPS;
 
-  if (frameLimit < ticks) return;
+  if (frameLimit < ticks)
+  {
+    printf("Error Scheduling : frameLimit(%d) < ticks(%d). Jitter = %d\n", frameLimit, ticks, ticks - frameLimit);
+    return;
+  } 
 
   if (frameLimit > ticks + freq) SDL_Delay(freq);
   else SDL_Delay(frameLimit - ticks);
 }
 
 
-void drawGame(void)
+void showBBox(Pelement el)
+{
+  // Warning polygonsToWorld alloate a pointer on Polygon
+  Polygon *poly_el = polygonsToWorld(el);
+
+  int i;
+  for(i = 0; i < el->bbox.nb_box; i++)
+    drawPolygon( poly_el[i].ul,
+                 poly_el[i].ur,
+                 poly_el[i].br,
+                 poly_el[i].bl 
+               );
+
+  free (poly_el);
+}
+
+
+void displayGame(void)
 { 
   // Clean la fenêtre
   SDL_RenderClear(renderer);
   // Affiche les éléments du jeu
-  drawGraphics();
-  // Actualise
+  // Draw background
+  Pelement map = getMap();
+  drawSATexture (map->texture_id, map->pos, map->angle);
+  // Draw missiles
+  Pelement pl_fire = getFireList();
+  while(pl_fire != NULL)
+  {
+    drawSATexture (pl_fire->texture_id, pl_fire->pos, pl_fire->angle);
+    showBBox(pl_fire);
+    pl_fire = pl_fire->next;
+  }
+  // Draw enemies ship
+  Pelement pl_en = getEnemy1List();
+  while(pl_en != NULL)
+  {
+    drawSATexture (pl_en->texture_id, pl_en->pos, pl_en->angle);
+    showBBox(pl_en);
+    pl_en = pl_en->next;
+  }
+  // Draw gamer ship
+  Pelement ship = getShip(); 
+  drawSATexture (ship->texture_id, ship->pos, ship->angle);
+  //drawElement(getShip());
+  showBBox(ship);
+  drawExplosion();
+  // Set red render for Bounding box dsplay
+  SDL_SetRenderDrawColor(getRenderer(), 255, 0, 0, 255);
+  // Update
   SDL_RenderPresent(renderer);
-  // Délai pour laisser respirer le proc
-  SDL_Delay(1);
 }
 
 
 void mainGameLoop(int frameLimit)
 {
-  unsigned int freq = 1000 / FPS;
-
+  unsigned int next_frame =  SDL_GetTicks() + frameLimit;
+  
   while(go)
   {
+    //printf("Tic = %d\n",SDL_GetTicks());
     updateEventManager();
     updateListMotion(getFireList(),updateFireList);
     //enemy1Pattern();
-    //updateListMotion(getEnemy1List(),updateEnemy1List);
+    updateListMotion(getEnemy1List(),updateEnemy1List);
     checkCollisions();
-    drawGame();
-    delay(frameLimit);
-    frameLimit = SDL_GetTicks() + freq;
-    printf("Current Tick : %d\n",SDL_GetTicks());
+    displayGame();
+    //printf("Toc = %d\n",SDL_GetTicks());
+    //printf("######################################\n");
+    delay(next_frame);
+    next_frame = SDL_GetTicks() + frameLimit;  
   }
 }
 
@@ -198,10 +252,12 @@ void mainGameLoop(int frameLimit)
 void cleanGame()
 {
   cleanGraphics();
-  printf("Graphics clean\n");
-  delete_all(fireList);
-  delete_all(enemy1List);
-  printf("List Clean\n");
+  printf("Graphics cleaned\n");
+  deleteListOfElement(getFireList());
+  deleteListOfElement(getEnemy1List());
+  printf("Lists cleaned\n");
+  free(getShip());
+  free(getMap());
   SDL_DestroyRenderer(renderer);
   renderer = NULL;
   SDL_DestroyWindow(screen);

@@ -1,5 +1,5 @@
 #include "Collision.h"
-#include "math.h"
+#include <math.h>
 
 
 void setMapBoundingBox(Pelement map) {}
@@ -57,6 +57,7 @@ void setEnemy1BoundingBox(Pelement en)
 
   en_box->box[0].br.x = en_box->box[0].ul.x + en_box->box[0].width;
   en_box->box[0].br.y = en_box->box[0].ul.y + en_box->box[0].height;
+
   /*
   p_bbox1=en_box->box[0];
   printf("p_bbox1.ul=(%d,%d)\n",p_bbox1.ul.x,p_bbox1.ul.y);
@@ -78,6 +79,9 @@ void setEnemy1BoundingBox(Pelement en)
 
   en_box->box[1].br.x = en_box->box[1].ul.x + en_box->box[1].width;
   en_box->box[1].br.y = en_box->box[1].ul.y + en_box->box[1].height;
+
+  rotatePolygon(&(en_box->box[0]), M_PI);
+  rotatePolygon(&(en_box->box[1]), M_PI);
 }
 
 void setShipBoundingBox(Pelement shp)
@@ -186,16 +190,15 @@ bool isPolygonsCollision(Polygon p1, Polygon p2)
 
       // Si au moins un point se trouve à gauche => en dehors du polygone => pas de collisions 
       if (cross_product2 <= 0)
-      {
         break;
-      }
-    }
+      
+    } // End  for (i = 0; i < NB_POINTS_POLYGON; i++)
+
     if (j == NB_POINTS_POLYGON)
-    {
-      printf("Collision\n");
       return true;
-    }
-  }
+    
+  } // End  for (i = 0; i < NB_POINTS_POLYGON; i++)
+
   return false;
 }
 
@@ -211,7 +214,6 @@ bool isElementsCollision(Pelement el1, Pelement el2)
   if (distance > min_distance_to_compute_check)
     return false;
 
-  //printf("In %s pre check passed\n",__FUNCTION__);
   Polygon *poly_el1 = polygonsToWorld(el1);
   Polygon *poly_el2 = polygonsToWorld(el2);  
   
@@ -266,7 +268,7 @@ void checkCollisions()
       //Check collision between ship and enemy
       if( isElementsCollision(pl_enn, getShip()) )
       {
-        printf("Collision enemy avec ship\n");
+        RequestExplosion(pl_enn->pos);
         moveElementOutOfRange(pl_enn);
         break;
       }
@@ -276,7 +278,6 @@ void checkCollisions()
       {
         if(isElementsCollision(pl_fire, pl_enn))
         {
-          printf("Collision enemy avec missile\n");
           RequestExplosion(pl_enn->pos);
           moveElementOutOfRange(pl_enn);
           moveElementOutOfRange(pl_fire);
