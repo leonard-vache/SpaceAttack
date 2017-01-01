@@ -47,7 +47,7 @@ CMakeFiles/SpaceAttack.dir/src/Collision.c.o: /usr/include/SDL2/begin_code.h
 CMakeFiles/SpaceAttack.dir/src/Collision.c.o: /usr/include/SDL2/close_code.h
 CMakeFiles/SpaceAttack.dir/src/Collision.c.o: include/Collision.h
 CMakeFiles/SpaceAttack.dir/src/Collision.c.o: include/Common.h
-CMakeFiles/SpaceAttack.dir/src/Collision.c.o: include/Element.h
+CMakeFiles/SpaceAttack.dir/src/Collision.c.o: include/Geometry.h
 CMakeFiles/SpaceAttack.dir/src/Collision.c.o: include/GraphicsMgt.h
 
 CMakeFiles/SpaceAttack.dir/src/Element.c.o: src/Element.c
@@ -94,8 +94,10 @@ CMakeFiles/SpaceAttack.dir/src/Element.c.o: /usr/include/SDL2/SDL_version.h
 CMakeFiles/SpaceAttack.dir/src/Element.c.o: /usr/include/SDL2/SDL_video.h
 CMakeFiles/SpaceAttack.dir/src/Element.c.o: /usr/include/SDL2/begin_code.h
 CMakeFiles/SpaceAttack.dir/src/Element.c.o: /usr/include/SDL2/close_code.h
+CMakeFiles/SpaceAttack.dir/src/Element.c.o: include/Collision.h
 CMakeFiles/SpaceAttack.dir/src/Element.c.o: include/Common.h
 CMakeFiles/SpaceAttack.dir/src/Element.c.o: include/Element.h
+CMakeFiles/SpaceAttack.dir/src/Element.c.o: include/Geometry.h
 CMakeFiles/SpaceAttack.dir/src/Element.c.o: include/GraphicsMgt.h
 
 CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: src/GameMgt.c
@@ -146,9 +148,56 @@ CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: include/Collision.h
 CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: include/Common.h
 CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: include/Element.h
 CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: include/GameMgt.h
+CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: include/Geometry.h
 CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: include/GraphicsMgt.h
 CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: include/KeyboardMgt.h
-CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: include/Prototypes.h
+
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: src/Geometry.c
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_assert.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_atomic.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_audio.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_blendmode.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_clipboard.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_config.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_cpuinfo.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_endian.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_error.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_events.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_filesystem.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_gamecontroller.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_gesture.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_haptic.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_hints.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_joystick.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_keyboard.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_keycode.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_loadso.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_log.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_main.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_messagebox.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_mouse.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_mutex.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_pixels.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_platform.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_power.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_quit.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_rect.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_render.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_rwops.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_scancode.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_stdinc.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_surface.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_system.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_thread.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_timer.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_touch.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_version.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/SDL_video.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/begin_code.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: /usr/include/SDL2/close_code.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: include/Common.h
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: include/Geometry.h
 
 CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o: src/GraphicsMgt.c
 CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o: /usr/include/SDL2/SDL.h
@@ -194,7 +243,9 @@ CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o: /usr/include/SDL2/SDL_version.h
 CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o: /usr/include/SDL2/SDL_video.h
 CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o: /usr/include/SDL2/begin_code.h
 CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o: /usr/include/SDL2/close_code.h
+CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o: include/Collision.h
 CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o: include/Common.h
+CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o: include/Geometry.h
 CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o: include/GraphicsMgt.h
 
 CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: src/KeyboardMgt.c
@@ -244,9 +295,9 @@ CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: /usr/include/SDL2/close_code.h
 CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: include/Collision.h
 CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: include/Common.h
 CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: include/Element.h
+CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: include/Geometry.h
 CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: include/GraphicsMgt.h
 CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: include/KeyboardMgt.h
-CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: include/Prototypes.h
 
 CMakeFiles/SpaceAttack.dir/src/main.c.o: src/main.c
 CMakeFiles/SpaceAttack.dir/src/main.c.o: /usr/include/SDL2/SDL.h

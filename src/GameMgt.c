@@ -3,27 +3,8 @@
 
 SDL_Window* screen = NULL;
 SDL_Renderer* renderer = NULL;
-/*
-Pelement map = NULL;
-Pelement ship = NULL;
-Pelement fireList = NULL;
-Pelement enemy1List = NULL;
-*/
-int go = 1;
 
-
-//int adaptToFPS(float value) { return 60 / (round(60.0 * FPS / value) / FPS); }
-/*
-Pelement getMap() { return map; }
-
-Pelement getFireList() { return fireList; }
-void updateFireList(Pelement l) { fireList = l; }
-
-Pelement getEnemy1List() { return enemy1List; }
-void updateEnemy1List(Pelement l) { enemy1List = l; }
-
-Pelement getShip() { return ship; }
-*/
+bool go = 1;
 
 void stopGame() { go = 0; }
 
@@ -54,7 +35,7 @@ int initGame()
 }
 
 
-void updateListMotion(Pelement pl, ptrFunction updateList)
+void updateListMotion(Pelement pl, ptrFunctionPelement updateList)
 {
   Pelement pl_prev = pl;
   Pelement pl_to_free;
@@ -90,45 +71,36 @@ void updateListMotion(Pelement pl, ptrFunction updateList)
   }
 }
 
-// Durty... To rework !
+
+void circularMotion(Pelement el)
+{
+  el->angle = fmod(el->angle + el->speed[1],360.f);
+}
+
+void sinusoidalMotion(Pelement el)
+{
+  static double sinusoidal_angle = 0.f;
+  double sinusoidal_speed = 6.f;
+
+  el->angle = fmod(el->angle + el->speed[1] * cos(sinusoidal_angle*M_PI/180) ,360.f);
+
+  //printf("sinusoidal_angle=%f - el->speed[1]=%f - el->angle=%f\n",sinusoidal_angle, el->speed[1]*sin(sinusoidal_angle*M_PI/180), el->angle);
+  sinusoidal_angle = fmod(sinusoidal_angle + sinusoidal_speed, 360.f);
+}
+
+
 void enemy1Pattern()
 {
   Pelement pl_enn = getEnemy1List();
-  static positif = 0;
-  static int turn_left=0;
-  static int turn_right=1;
   while(pl_enn != NULL)
   {
-    int x = pl_enn->pos.x;
-    int y = pl_enn->pos.y;
-    if (x < SCREEN_WIDTH / 7 && turn_left == 0) turn_left = 1;
-    if (turn_left == 1)
-    {
-        if(pl_enn->angle <= 0 ) 
-        {
-          pl_enn->angle = 0;
-          turn_left=2;
-          turn_right=0;
-        }
-        else 
-          pl_enn->angle -= pl_enn->speed[1];
-    }
-    
-    if (x > 6 * SCREEN_WIDTH / 7 && turn_right == 0) turn_right = 1;
-    if (turn_right == 1)
-    {
-        if(pl_enn->angle >= 180 )
-        {
-          pl_enn->angle = 180;
-          turn_left=0;
-          turn_right=2;
-        } 
-        else pl_enn->angle += pl_enn->speed[1];
-    }
-   // printf("enn angle = %d\n",pl_enn->angle);
+    //circularMotion(pl_enn);
+    sinusoidalMotion(pl_enn);
     pl_enn = pl_enn->next;
   }
+  updateListMotion(getEnemy1List(),updateEnemy1List);
 }
+
 
 
 void loadGame() 
@@ -175,26 +147,25 @@ void delay(unsigned int frameLimit)
 
 void showBBox(Pelement el)
 {
-  // Warning polygonsToWorld alloate a pointer on Polygon
-  Polygon *poly_el = polygonsToWorld(el);
+  // Warning boundingBoxToWorld alloate pointer
+  BoundingBox bbox = boundingBoxToWorld(el->bbox, el->pos);
 
   int i;
-  for(i = 0; i < el->bbox.nb_box; i++)
-    drawPolygon( poly_el[i].ul,
-                 poly_el[i].ur,
-                 poly_el[i].br,
-                 poly_el[i].bl 
+  for(i = 0; i < bbox.nb_box; i++)
+    drawPolygon( bbox.box[i].ul,
+                 bbox.box[i].ur,
+                 bbox.box[i].br,
+                 bbox.box[i].bl 
                );
 
-  free (poly_el);
+  free (bbox.box);
 }
 
 
 void displayGame(void)
 { 
-  // Clean la fenêtre
+  // Clean the Window
   SDL_RenderClear(renderer);
-  // Affiche les éléments du jeu
   // Draw background
   Pelement map = getMap();
   drawSATexture (map->texture_id, map->pos, map->angle);
@@ -217,8 +188,8 @@ void displayGame(void)
   // Draw gamer ship
   Pelement ship = getShip(); 
   drawSATexture (ship->texture_id, ship->pos, ship->angle);
-  //drawElement(getShip());
   showBBox(ship);
+
   drawExplosion();
   // Set red render for Bounding box dsplay
   SDL_SetRenderDrawColor(getRenderer(), 255, 0, 0, 255);
@@ -227,23 +198,59 @@ void displayGame(void)
 }
 
 
+
+void checkCollisions()
+{ 
+  Pelement ship = getShip();
+  updateBoundingBox(&(ship->bbox), ship->angle);
+
+  Pelement pl_enn = getEnemy1List();
+  while(pl_enn != NULL)
+  {
+    updateBoundingBox(&(pl_enn->bbox), pl_enn->angle);
+    //Check collision between ship and enemy
+    if( isElementsCollision(pl_enn, getShip()) )
+    {
+      requestExplosion(pl_enn->pos);
+      moveElementOutOfRange(pl_enn);
+      break;
+    }
+    // Check Collison entre ennemy and missile
+    Pelement pl_fire = getFireList();
+    while(pl_fire != NULL)
+    {
+      updateBoundingBox(&(pl_fire->bbox), pl_fire->angle);
+      if(isElementsCollision(pl_fire, pl_enn))
+      {
+        requestExplosion(pl_enn->pos);
+        moveElementOutOfRange(pl_enn);
+        moveElementOutOfRange(pl_fire);
+        break;
+      }
+      else 
+        pl_fire = pl_fire->next;
+    }
+    pl_enn = pl_enn->next;
+  }
+}
+
+
 void mainGameLoop(int frameLimit)
 {
-  unsigned int next_frame =  SDL_GetTicks() + frameLimit;
+  unsigned int next_frameLimit =  SDL_GetTicks() + frameLimit;
   
   while(go)
   {
     //printf("Tic = %d\n",SDL_GetTicks());
     updateEventManager();
     updateListMotion(getFireList(),updateFireList);
-    //enemy1Pattern();
-    updateListMotion(getEnemy1List(),updateEnemy1List);
+    enemy1Pattern();
     checkCollisions();
     displayGame();
     //printf("Toc = %d\n",SDL_GetTicks());
     //printf("######################################\n");
-    delay(next_frame);
-    next_frame = SDL_GetTicks() + frameLimit;  
+    delay(next_frameLimit);
+    next_frameLimit = SDL_GetTicks() + frameLimit;  
   }
 }
 

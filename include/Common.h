@@ -25,12 +25,6 @@
 #define ENEMY1_LINEAR_VELOCITY  4
 
 
-typedef struct SpaceAttack_Point
-{
-  float x;
-  float y;
-} SA_Point;
-
 extern SDL_Renderer *getRenderer();
 
 #endif

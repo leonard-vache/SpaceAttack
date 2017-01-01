@@ -187,6 +187,30 @@ src/GameMgt.c.s:
 	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/GameMgt.c.s
 .PHONY : src/GameMgt.c.s
 
+src/Geometry.o: src/Geometry.c.o
+.PHONY : src/Geometry.o
+
+# target to build an object file
+src/Geometry.c.o:
+	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Geometry.c.o
+.PHONY : src/Geometry.c.o
+
+src/Geometry.i: src/Geometry.c.i
+.PHONY : src/Geometry.i
+
+# target to preprocess a source file
+src/Geometry.c.i:
+	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Geometry.c.i
+.PHONY : src/Geometry.c.i
+
+src/Geometry.s: src/Geometry.c.s
+.PHONY : src/Geometry.s
+
+# target to generate assembly for a file
+src/Geometry.c.s:
+	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Geometry.c.s
+.PHONY : src/Geometry.c.s
+
 src/GraphicsMgt.o: src/GraphicsMgt.c.o
 .PHONY : src/GraphicsMgt.o
 
@@ -277,6 +301,9 @@ help:
 	@echo "... src/GameMgt.o"
 	@echo "... src/GameMgt.i"
 	@echo "... src/GameMgt.s"
+	@echo "... src/Geometry.o"
+	@echo "... src/Geometry.i"
+	@echo "... src/Geometry.s"
 	@echo "... src/GraphicsMgt.o"
 	@echo "... src/GraphicsMgt.i"
 	@echo "... src/GraphicsMgt.s"

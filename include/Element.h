@@ -2,34 +2,16 @@
 #define ELEMENT_H
 
 #include "Common.h"
+#include "Geometry.h"
 #include "GraphicsMgt.h"
+#include "Collision.h"
+
 
 typedef struct element *Pelement;
 
 // Pointeur sur fonction update**ListMotion ou set**BoundingBox. 
 // Toutes les fonctions qui retourne void + prenne en argument Pelement
-typedef void (*ptrFunction)(Pelement);
- 
-
-
-typedef struct Polygon 
-{
-  SA_Point ul;   // Upper left
-  SA_Point ur;   // Upper right
-  SA_Point bl;   // Bottom left
-  SA_Point br;   // Bottom right
-  float width;
-  float height;
-} Polygon;
-
-
-typedef struct boundingbox
-{
-  unsigned short int nb_box;
-  Polygon *box;
-  float previous_angle;
-  //void (*init_bbox)(Pelement);
-} BoundingBox;
+typedef void (*ptrFunctionPelement)(Pelement);
 
 
 typedef struct element 
@@ -57,19 +39,13 @@ extern Pelement getEnemy1List();
 extern void updateEnemy1List(Pelement el);
 
 
-Polygon *polygonsToWorld(Pelement el);
-
-SA_Point SDL_to_SA_Point(SDL_Point sdl_p);
-
-SDL_Point SA_Point_to_SDL(SA_Point sa_p);
-
 Pelement createElement(SpaceAttack_te_texture txt_id, SDL_Rect p, int v, int w, double angle, unsigned short int nb_box, 
-  ptrFunction setBBox);
-
+  ptrFunctionBoundingBox setBBox);
 Pelement addElement(Pelement pliste, Pelement el);
-
 Pelement extract(Pelement pliste, Pelement el);
 
 void deleteListOfElement(Pelement pliste);
+bool isElementsCollision(Pelement el1, Pelement el2);
+void moveElementOutOfRange(Pelement el);
 
 #endif

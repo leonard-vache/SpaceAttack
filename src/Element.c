@@ -21,79 +21,9 @@ Pelement getEnemy1List() { return enemy1List; }
 void updateEnemy1List(Pelement el) { enemy1List = el; }
 
 
-
-SA_Point sum_SA_Point(SA_Point sa1, SA_Point sa2)
-{
-  SA_Point sum;
-  sum.x = sa1.x + sa2.x;
-  sum.y = sa1.y + sa2.y;
-
-  return sum;
-}
-
-SA_Point SDL_to_SA_Point(SDL_Point sdl_p)
-{
-  SA_Point sa_p;
-  sa_p.x = (float) sdl_p.x;
-  sa_p.y = (float) sdl_p.y;
-
-  return sa_p;
-}
-
-SA_Point SDL_Rect_to_SA_Point(SDL_Rect sdl_r)
-{
-  SA_Point sa_p;
-  sa_p.x = (float) sdl_r.x;
-  sa_p.y = (float) sdl_r.y;
-
-  return sa_p;
-}
-
-void SA_Point_to_SDL_World(SA_Point *sa_p, SDL_Rect sdl_r)
-{
-
-  sa_p->x += (float)sdl_r.x;
-  sa_p->y = (float)sdl_r.y + sa_p->y;
-}
-
-SDL_Point SA_Point_to_SDL(SA_Point sa_p)
-{
-  SDL_Point sdl_p;
-  sdl_p.x = round(sa_p.x);
-  sdl_p.y = round(sa_p.y);
-
-  return sdl_p;
-}
-
-Polygon *polygonsToWorld(Pelement el)
-{
-  Polygon *poly = (Polygon*)malloc(el->bbox.nb_box * sizeof(Polygon));
-  int i;
-  for (i = 0; i < el->bbox.nb_box; i++)
-  {
-    poly[i] = el->bbox.box[i];
-    //poly[i].width = el->bbox.box[i].width,
-    //poly[i].height = el->bbox.box[i].height;
-    /*
-    poly[i].ul = SA_Point_to_SDL_World(poly[i].ul, el->pos);
-    poly[i].ur = SA_Point_to_SDL_World(poly[i].ur, el->pos);
-    poly[i].bl = SA_Point_to_SDL_World(poly[i].bl, el->pos);
-    poly[i].br = SA_Point_to_SDL_World(poly[i].br, el->pos);
-    */
-    SA_Point_to_SDL_World(&poly[i].ul, el->pos);
-    SA_Point_to_SDL_World(&poly[i].ur, el->pos);
-    SA_Point_to_SDL_World(&poly[i].bl, el->pos);
-    SA_Point_to_SDL_World(&poly[i].br, el->pos);
-    //printf("%s \n",__FUNCTION__);
-    
-  }
- // printf("\n");
-  return poly;
-}
-
 // Création + Initialisation d'un élément
 Pelement createElement(SpaceAttack_te_texture txt_id, SDL_Rect p, int v, int w, double angle, unsigned short int nb_box, 
-  ptrFunction setBBox)
+  ptrFunctionBoundingBox setBBox)
 { 
 	Pelement el;
 	el = (Pelement) malloc(sizeof(*el));
@@ -119,7 +49,7 @@ Pelement createElement(SpaceAttack_te_texture txt_id, SDL_Rect p, int v, int w, 
   el->bbox.box = (Polygon*)malloc(nb_box * sizeof(Polygon));
   el->bbox.previous_angle = -90.0;
   // Initialize Bounding Box
-  setBBox(el);
+  setBBox(&(el->bbox));
   //el->bbox.init_bbox = setBBox;
   
   el->next = NULL;
@@ -173,8 +103,8 @@ Pelement extract(Pelement pliste, Pelement el){ // Extraction d'un élément d'u
 
 void deleteElement(Pelement el)
 {
-    free(el->bbox.box);
-    free(el);
+  free(el->bbox.box);
+  free(el);
 }
 
 void deleteListOfElement(Pelement pliste) // Suppression de la liste entière
@@ -188,3 +118,45 @@ void deleteListOfElement(Pelement pliste) // Suppression de la liste entière
     deleteElement(pel);
 	}
 }
+
+
+bool isElementsCollision(Pelement el1, Pelement el2)
+{
+  // Si la distance entre deux élément est supérieur à la somme de leur diagonal, alors il ne peut avoir collision entre eux
+  // Optime : on raisonne avec les distances au carré (évite l'utilisation de sqrt)
+  int distance = pow(el1->pos.x - el2->pos.x,2) + pow(el1->pos.y - el2->pos.y,2);
+  int min_distance_to_compute_check = pow(el1->pos.h,2) + pow(el1->pos.w,2)  // diagonale du premier element
+                                    + pow(el2->pos.h,2) + pow(el2->pos.w,2); // diagonale du second element
+
+  if (distance > min_distance_to_compute_check)
+    return false;
+
+  BoundingBox bbox_el1 = boundingBoxToWorld(el1->bbox, el1->pos);
+  BoundingBox bbox_el2 = boundingBoxToWorld(el2->bbox, el2->pos);
+  
+  int i,j;
+  for (i = 0; i < bbox_el1.nb_box; i++)
+  {
+    for (j = 0; j < bbox_el2.nb_box; j++)
+    {      
+      if (isPolygonsCollision(bbox_el1.box[i], bbox_el2.box[j]) || isPolygonsCollision(bbox_el2.box[j], bbox_el1.box[i]) )
+      {
+        free(bbox_el1.box);
+        free(bbox_el2.box);
+        return true;
+      }
+    }
+  }
+
+  free(bbox_el1.box);
+  free(bbox_el2.box);
+  return false;
+}
+
+
+void moveElementOutOfRange(Pelement el)
+{
+  el->pos.x = 2.f * SCREEN_WIDTH;
+  el->pos.y = 2.f * SCREEN_HEIGHT;
+}
+

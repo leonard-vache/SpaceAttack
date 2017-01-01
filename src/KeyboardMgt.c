@@ -15,12 +15,13 @@ void shooting()
   {
     Pelement shp = getShip();
     Pelement newMissile = createElement( E_TEXT_SHIP_FIRE, 
-                                  shp->pos, 
-                                  SHIP_FIRE_SPEED, 
-                                  0, 
-                                  shp->angle,
-                                  NB_BOUNDING_BOX_FIRE_SHIP, 
-                                  setShipFireBoundingBox);
+                                         shp->pos, 
+                                         SHIP_FIRE_SPEED, 
+                                         0, 
+                                         shp->angle,
+                                         NB_BOUNDING_BOX_FIRE_SHIP, 
+                                         setShipFireBoundingBox
+                                       );
     // addElement() function returns the pointer to new linked list with added element
     // update() function sets FireList pointer to list returned by add function
     updateFireList(addElement(getFireList(),newMissile));
@@ -94,9 +95,13 @@ void shipMove()
           printf("Error unknown motion\n");
           stopGame();
           break;
-      }
-    }
-  }
+
+      } // End switch(i)
+
+    } // End if(keyState[i] == 1)
+
+  } // End for(i = 0; i < NUM_KEY; i++)
+  
 }
 
 

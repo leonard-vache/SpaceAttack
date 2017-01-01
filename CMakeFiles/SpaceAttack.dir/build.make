@@ -118,9 +118,32 @@ CMakeFiles/SpaceAttack.dir/src/main.c.o.provides: CMakeFiles/SpaceAttack.dir/src
 
 CMakeFiles/SpaceAttack.dir/src/main.c.o.provides.build: CMakeFiles/SpaceAttack.dir/src/main.c.o
 
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: CMakeFiles/SpaceAttack.dir/flags.make
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o: src/Geometry.c
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/leo/Git_Project/SpaceAttack/CMakeFiles $(CMAKE_PROGRESS_4)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building C object CMakeFiles/SpaceAttack.dir/src/Geometry.c.o"
+	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -o CMakeFiles/SpaceAttack.dir/src/Geometry.c.o   -c /home/leo/Git_Project/SpaceAttack/src/Geometry.c
+
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/SpaceAttack.dir/src/Geometry.c.i"
+	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -E /home/leo/Git_Project/SpaceAttack/src/Geometry.c > CMakeFiles/SpaceAttack.dir/src/Geometry.c.i
+
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/SpaceAttack.dir/src/Geometry.c.s"
+	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -S /home/leo/Git_Project/SpaceAttack/src/Geometry.c -o CMakeFiles/SpaceAttack.dir/src/Geometry.c.s
+
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o.requires:
+.PHONY : CMakeFiles/SpaceAttack.dir/src/Geometry.c.o.requires
+
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o.provides: CMakeFiles/SpaceAttack.dir/src/Geometry.c.o.requires
+	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Geometry.c.o.provides.build
+.PHONY : CMakeFiles/SpaceAttack.dir/src/Geometry.c.o.provides
+
+CMakeFiles/SpaceAttack.dir/src/Geometry.c.o.provides.build: CMakeFiles/SpaceAttack.dir/src/Geometry.c.o
+
 CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: CMakeFiles/SpaceAttack.dir/flags.make
 CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o: src/KeyboardMgt.c
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/leo/Git_Project/SpaceAttack/CMakeFiles $(CMAKE_PROGRESS_4)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/leo/Git_Project/SpaceAttack/CMakeFiles $(CMAKE_PROGRESS_5)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building C object CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -o CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o   -c /home/leo/Git_Project/SpaceAttack/src/KeyboardMgt.c
 
@@ -143,7 +166,7 @@ CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o.provides.build: CMakeFiles/SpaceA
 
 CMakeFiles/SpaceAttack.dir/src/Collision.c.o: CMakeFiles/SpaceAttack.dir/flags.make
 CMakeFiles/SpaceAttack.dir/src/Collision.c.o: src/Collision.c
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/leo/Git_Project/SpaceAttack/CMakeFiles $(CMAKE_PROGRESS_5)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/leo/Git_Project/SpaceAttack/CMakeFiles $(CMAKE_PROGRESS_6)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building C object CMakeFiles/SpaceAttack.dir/src/Collision.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -o CMakeFiles/SpaceAttack.dir/src/Collision.c.o   -c /home/leo/Git_Project/SpaceAttack/src/Collision.c
 
@@ -166,7 +189,7 @@ CMakeFiles/SpaceAttack.dir/src/Collision.c.o.provides.build: CMakeFiles/SpaceAtt
 
 CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: CMakeFiles/SpaceAttack.dir/flags.make
 CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o: src/GameMgt.c
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/leo/Git_Project/SpaceAttack/CMakeFiles $(CMAKE_PROGRESS_6)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/leo/Git_Project/SpaceAttack/CMakeFiles $(CMAKE_PROGRESS_7)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building C object CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_FLAGS) -o CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o   -c /home/leo/Git_Project/SpaceAttack/src/GameMgt.c
 
@@ -192,6 +215,7 @@ SpaceAttack_OBJECTS = \
 "CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o" \
 "CMakeFiles/SpaceAttack.dir/src/Element.c.o" \
 "CMakeFiles/SpaceAttack.dir/src/main.c.o" \
+"CMakeFiles/SpaceAttack.dir/src/Geometry.c.o" \
 "CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o" \
 "CMakeFiles/SpaceAttack.dir/src/Collision.c.o" \
 "CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o"
@@ -202,6 +226,7 @@ SpaceAttack_EXTERNAL_OBJECTS =
 bin/SpaceAttack: CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o
 bin/SpaceAttack: CMakeFiles/SpaceAttack.dir/src/Element.c.o
 bin/SpaceAttack: CMakeFiles/SpaceAttack.dir/src/main.c.o
+bin/SpaceAttack: CMakeFiles/SpaceAttack.dir/src/Geometry.c.o
 bin/SpaceAttack: CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o
 bin/SpaceAttack: CMakeFiles/SpaceAttack.dir/src/Collision.c.o
 bin/SpaceAttack: CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o
@@ -219,6 +244,7 @@ CMakeFiles/SpaceAttack.dir/build: bin/SpaceAttack
 CMakeFiles/SpaceAttack.dir/requires: CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o.requires
 CMakeFiles/SpaceAttack.dir/requires: CMakeFiles/SpaceAttack.dir/src/Element.c.o.requires
 CMakeFiles/SpaceAttack.dir/requires: CMakeFiles/SpaceAttack.dir/src/main.c.o.requires
+CMakeFiles/SpaceAttack.dir/requires: CMakeFiles/SpaceAttack.dir/src/Geometry.c.o.requires
 CMakeFiles/SpaceAttack.dir/requires: CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o.requires
 CMakeFiles/SpaceAttack.dir/requires: CMakeFiles/SpaceAttack.dir/src/Collision.c.o.requires
 CMakeFiles/SpaceAttack.dir/requires: CMakeFiles/SpaceAttack.dir/src/GameMgt.c.o.requires

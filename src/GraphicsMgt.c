@@ -156,9 +156,9 @@ void drawPolygon(SA_Point ul, SA_Point ur, SA_Point br, SA_Point bl)
 }
 
 
-void RequestExplosion(SDL_Rect position)
+void requestExplosion(SDL_Rect position)
 {
-  // Creation of an explosion element. It will be destroyed by EndExplosion() function.
+  // Creation of an explosion element. It will be destroyed by endExplosion() function.
   Explosion *ex;
   ex = malloc(sizeof(Explosion));
  
@@ -172,7 +172,7 @@ void RequestExplosion(SDL_Rect position)
   updateExplosionList(ex);
 }
 
-void EndExplosion(Explosion *ex)
+void endExplosion(Explosion *ex)
 {
   Explosion *pl_ex = getExplosionList();
   if (pl_ex == ex )
@@ -245,7 +245,7 @@ void drawExplosion ()
    
     if ( NB_EXPLOSION == pl_ex->collision_id  )
     {
-      EndExplosion(pl_ex);
+      endExplosion(pl_ex);
     }
     pl_ex = pl_ex->next;
   }

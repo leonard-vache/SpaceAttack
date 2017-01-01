@@ -6,15 +6,19 @@
 
 #IncludeRegexTransform: 
 
+/home/leo/Git_Project/SpaceAttack/src/Collision.c
+Collision.h
+/home/leo/Git_Project/SpaceAttack/src/Collision.h
+GraphicsMgt.h
+/home/leo/Git_Project/SpaceAttack/src/GraphicsMgt.h
+
+/home/leo/Git_Project/SpaceAttack/src/Element.c
+Element.h
+/home/leo/Git_Project/SpaceAttack/src/Element.h
+
 /home/leo/Git_Project/SpaceAttack/src/GameMgt.c
 GameMgt.h
 /home/leo/Git_Project/SpaceAttack/src/GameMgt.h
-
-/home/leo/Git_Project/SpaceAttack/src/main.c
-Common.h
-/home/leo/Git_Project/SpaceAttack/src/Common.h
-Prototypes.h
-/home/leo/Git_Project/SpaceAttack/src/Prototypes.h
 
 /usr/include/SDL2/SDL.h
 SDL_main.h
@@ -563,8 +567,8 @@ close_code.h
 include/Collision.h
 Common.h
 include/Common.h
-Element.h
-include/Element.h
+Geometry.h
+include/Geometry.h
 
 include/Common.h
 stdio.h
@@ -577,8 +581,12 @@ SDL.h
 include/Element.h
 Common.h
 include/Common.h
+Geometry.h
+include/Geometry.h
 GraphicsMgt.h
 include/GraphicsMgt.h
+Collision.h
+include/Collision.h
 
 include/GameMgt.h
 Common.h
@@ -587,24 +595,20 @@ Element.h
 include/Element.h
 KeyboardMgt.h
 include/KeyboardMgt.h
-Collision.h
-include/Collision.h
+
+include/Geometry.h
+Common.h
+include/Common.h
 
 include/GraphicsMgt.h
 Common.h
 include/Common.h
+Collision.h
+include/Collision.h
 
 include/KeyboardMgt.h
 Common.h
 include/Common.h
 Element.h
 include/Element.h
-Prototypes.h
-include/Prototypes.h
-Element.h
-include/Element.h
-Collision.h
-include/Collision.h
-
-include/Prototypes.h
 

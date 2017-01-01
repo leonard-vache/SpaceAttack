@@ -1,13 +1,12 @@
 #include "Collision.h"
-#include <math.h>
+#include "GraphicsMgt.h"
 
 
-void setMapBoundingBox(Pelement map) {}
 
-void setShipFireBoundingBox(Pelement fire)
+void setMapBoundingBox(BoundingBox *map_box) {}
+
+void setShipFireBoundingBox(BoundingBox *fire_box)
 {
-  BoundingBox *fire_box = &(fire->bbox);
-
   if (fire_box->nb_box != NB_BOUNDING_BOX_FIRE_SHIP)
   {
     printf("Error in setShipFireBoundingBox 1 BoundingBox is expected\n");
@@ -15,10 +14,13 @@ void setShipFireBoundingBox(Pelement fire)
     return;
   }
 
-  fire_box->box[0].ul.x = -fire->pos.w / 2.f;
-  fire_box->box[0].ul.y = -fire->pos.h / 2.f;
-  fire_box->box[0].width = (float)fire->pos.w;
-  fire_box->box[0].height = (float)fire->pos.h;
+  SDL_Rect fire;
+  getTextureDimension(E_TEXT_SHIP_FIRE, &fire);
+
+  fire_box->box[0].ul.x = -fire.w / 2.f;
+  fire_box->box[0].ul.y = -fire.h / 2.f;
+  fire_box->box[0].width = (float)fire.w;
+  fire_box->box[0].height = (float)fire.h;
 
   fire_box->box[0].ur.x = fire_box->box[0].ul.x + fire_box->box[0].width;
   fire_box->box[0].ur.y = fire_box->box[0].ul.y;
@@ -31,15 +33,17 @@ void setShipFireBoundingBox(Pelement fire)
 }
 
 
-void setEnemy1BoundingBox(Pelement en)
+void setEnemy1BoundingBox(BoundingBox *en_box)
 {
-  BoundingBox *en_box = &(en->bbox);
   if (en_box->nb_box != NB_BOUNDING_BOX_ENEMY1)
   {
     printf("Error in setEnemy1BoundingBox 2 BoundingBox are expected\n");
     stopGame();
     return;
   }
+
+  SDL_Rect en;
+  getTextureDimension(E_TEXT_ENEMY1, &en);
 
   //                            0--->
   //                            |
@@ -66,9 +70,9 @@ void setEnemy1BoundingBox(Pelement en)
   printf("p_bbox1.br=(%d,%d)\n",p_bbox1.br.x,p_bbox1.br.y);
   printf("p_bbox1.height=%d p_bbox1.width=%d\n",p_bbox1.height,p_bbox1.width);
   */
-  en_box->box[1].ul.x = -en->pos.w / 2.f;
+  en_box->box[1].ul.x = -en.w / 2.f;
   en_box->box[1].ul.y = -25.f;
-  en_box->box[1].width = (float)en->pos.w;
+  en_box->box[1].width = (float)en.w;
   en_box->box[1].height = 32.f;
 
   en_box->box[1].ur.x = en_box->box[1].ul.x + en_box->box[1].width;
@@ -84,15 +88,18 @@ void setEnemy1BoundingBox(Pelement en)
   rotatePolygon(&(en_box->box[1]), M_PI);
 }
 
-void setShipBoundingBox(Pelement shp)
+void setShipBoundingBox(BoundingBox *shp_box)
 {
-  BoundingBox *shp_box = &(shp->bbox);
   if (shp_box->nb_box != NB_BOUNDING_BOX_SHIP)
   {
     printf("Error in setShipBoundingBox 2 BoundingBox are expected\n");
     stopGame();
     return;
   }
+
+  SDL_Rect shp;
+  getTextureDimension(E_TEXT_SHIP, &shp);
+
   // First bounding box. Polygon point are set in ship referentiel
   shp_box->box[0].ul.x = -9.f;
   shp_box->box[0].ul.y = -20.f;
@@ -111,9 +118,9 @@ void setShipBoundingBox(Pelement shp)
   // Second Bounding box
   // Remove fin from Bounding Box
   float fin = 6.f;
-  shp_box->box[1].ul.x = -shp->pos.w / 2.f + fin ;
+  shp_box->box[1].ul.x = -shp.w / 2.f + fin ;
   shp_box->box[1].ul.y = -3.f;
-  shp_box->box[1].width = (float)shp->pos.w - 2 * fin;
+  shp_box->box[1].width = (float)shp.w - 2 * fin;
   shp_box->box[1].height = 29.f;
 
   shp_box->box[1].ur.x = shp_box->box[1].ul.x + shp_box->box[1].width;
@@ -124,6 +131,36 @@ void setShipBoundingBox(Pelement shp)
 
   shp_box->box[1].br.x = shp_box->box[1].ul.x + shp_box->box[1].width;
   shp_box->box[1].br.y = shp_box->box[1].ul.y + shp_box->box[1].height;
+}
+
+
+BoundingBox boundingBoxToWorld(BoundingBox bbox_ref, SDL_Rect pos)
+{
+  BoundingBox bbox;
+  bbox.nb_box = bbox_ref.nb_box;
+  bbox.previous_angle = bbox_ref.previous_angle;
+  bbox.box = (Polygon*)malloc(bbox.nb_box * sizeof(Polygon));
+
+  int i;
+  for (i = 0; i < bbox.nb_box; i++)
+  {
+    bbox.box[i] = bbox_ref.box[i];
+    //poly[i].width = el->bbox.box[i].width,
+    //poly[i].height = el->bbox.box[i].height;
+    /*
+    poly[i].ul = SA_Point_to_SDL_World(poly[i].ul, el->pos);
+    poly[i].ur = SA_Point_to_SDL_World(poly[i].ur, el->pos);
+    poly[i].bl = SA_Point_to_SDL_World(poly[i].bl, el->pos);
+    poly[i].br = SA_Point_to_SDL_World(poly[i].br, el->pos);
+    */
+    SA_Point_to_SDL_World(&bbox.box[i].ul, pos);
+    SA_Point_to_SDL_World(&bbox.box[i].ur, pos);
+    SA_Point_to_SDL_World(&bbox.box[i].bl, pos);
+    SA_Point_to_SDL_World(&bbox.box[i].br, pos);
+    //printf("%s \n",__FUNCTION__);
+  }
+ // printf("\n");
+  return bbox;
 }
 
 
@@ -152,15 +189,15 @@ void printPolygon(Polygon poly)
 }
 
 
-void updateBoundingBox(Pelement el)
+void updateBoundingBox(BoundingBox *bbox, double el_angle)
 {
   // X = x*cos(θ) - y*sin(θ)
   // Y = x*sin(θ) + y*cos(θ)
   int i;
-  for (i = 0; i < el->bbox.nb_box; i++)
-    rotatePolygon(&(el->bbox.box[i]), M_PI/180.0 * (el->angle - el->bbox.previous_angle));
+  for (i = 0; i < bbox->nb_box; i++)
+    rotatePolygon(&(bbox->box[i]), M_PI/180.0 * (el_angle - bbox->previous_angle));
 
-  el->bbox.previous_angle = el->angle;  
+  bbox->previous_angle = el_angle;  
 }
 
 
@@ -203,89 +240,3 @@ bool isPolygonsCollision(Polygon p1, Polygon p2)
 }
 
 
-bool isElementsCollision(Pelement el1, Pelement el2)
-{
-  // Si la distance entre deux élément est supérieur à la somme de leur diagonal, alors il ne peut avoir collision entre eux
-  // Optime : on raisonne avec les distances au carré (évite l'utilisation de sqrt)
-  int distance = pow(el1->pos.x - el2->pos.x,2) + pow(el1->pos.y - el2->pos.y,2);
-  int min_distance_to_compute_check = pow(el1->pos.h,2) + pow(el1->pos.w,2)  // diagonale du premier element
-                                    + pow(el2->pos.h,2) + pow(el2->pos.w,2); // diagonale du second element
-
-  if (distance > min_distance_to_compute_check)
-    return false;
-
-  Polygon *poly_el1 = polygonsToWorld(el1);
-  Polygon *poly_el2 = polygonsToWorld(el2);  
-  
-  int i,j;
-  for (i = 0; i < el1->bbox.nb_box; i++)
-  {
-    for (j = 0; j < el2->bbox.nb_box; j++)
-    {      
-      if (isPolygonsCollision(poly_el1[i], poly_el2[j]) || isPolygonsCollision(poly_el2[j], poly_el1[i]) )
-      {
-        free(poly_el1);
-        free(poly_el2);
-        return true;
-      }
-    }
-  }
-
-  free(poly_el1);
-  free(poly_el2);
-  return false;
-}
-
-
-void moveElementOutOfRange(Pelement el)
-{
-  el->pos.x = 2.f * SCREEN_WIDTH;
-  el->pos.y = 2.f * SCREEN_HEIGHT;
-}
-
-
-void checkCollisions()
-{ 
-    Pelement pl_to_free;
-
-    Pelement pl_fire = getFireList();
-    int compt=0;
-    int nb_mis=0;
-    while(pl_fire != NULL)
-    {
-      nb_mis++;
-      updateBoundingBox(pl_fire);
-      pl_fire = pl_fire->next;
-    }
-
-    updateBoundingBox(getShip());
-
-    Pelement pl_enn = getEnemy1List();
-    while(pl_enn != NULL)
-    {
-      compt++;
-      updateBoundingBox(pl_enn);
-      //Check collision between ship and enemy
-      if( isElementsCollision(pl_enn, getShip()) )
-      {
-        RequestExplosion(pl_enn->pos);
-        moveElementOutOfRange(pl_enn);
-        break;
-      }
-      // Check Collison entre ennemy and missile
-      pl_fire = getFireList();
-      while(pl_fire != NULL)
-      {
-        if(isElementsCollision(pl_fire, pl_enn))
-        {
-          RequestExplosion(pl_enn->pos);
-          moveElementOutOfRange(pl_enn);
-          moveElementOutOfRange(pl_fire);
-          break;
-        }
-        else 
-          pl_fire = pl_fire->next;
-      }
-      pl_enn = pl_enn->next;
-    }
-}

@@ -2,7 +2,7 @@
 #define GRAPHICS_MGT_h
 
 #include "Common.h"
-//#include "Collision.h"
+#include "Collision.h"
 
 #define P_BACKGROUND  "./images/map.bmp"
 #define P_SHIP        "./images/ship.bmp"
@@ -40,9 +40,9 @@ typedef enum SA_te_texture
 SDL_Texture *loadImage(char *img_path);
 SDL_Texture *loadImageAlpha(char *img_path, int r, int g, int b);
 void cleanGraphics(void);
-//void drawElement(Pelement el);
 void drawSATexture(SpaceAttack_te_texture txt_id, SDL_Rect pos, double angle);
 void drawPolygon(SA_Point ul, SA_Point ur, SA_Point br, SA_Point bl);
-//static void drawTexture(SDL_Texture *image, int x, int y, int angle);
+
+void requestExplosion(SDL_Rect position);
 
 #endif
