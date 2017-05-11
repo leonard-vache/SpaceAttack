@@ -259,6 +259,30 @@ src/KeyboardMgt.c.s:
 	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.s
 .PHONY : src/KeyboardMgt.c.s
 
+src/Motion.o: src/Motion.c.o
+.PHONY : src/Motion.o
+
+# target to build an object file
+src/Motion.c.o:
+	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Motion.c.o
+.PHONY : src/Motion.c.o
+
+src/Motion.i: src/Motion.c.i
+.PHONY : src/Motion.i
+
+# target to preprocess a source file
+src/Motion.c.i:
+	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Motion.c.i
+.PHONY : src/Motion.c.i
+
+src/Motion.s: src/Motion.c.s
+.PHONY : src/Motion.s
+
+# target to generate assembly for a file
+src/Motion.c.s:
+	$(MAKE) -f CMakeFiles/SpaceAttack.dir/build.make CMakeFiles/SpaceAttack.dir/src/Motion.c.s
+.PHONY : src/Motion.c.s
+
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
@@ -310,6 +334,9 @@ help:
 	@echo "... src/KeyboardMgt.o"
 	@echo "... src/KeyboardMgt.i"
 	@echo "... src/KeyboardMgt.s"
+	@echo "... src/Motion.o"
+	@echo "... src/Motion.i"
+	@echo "... src/Motion.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

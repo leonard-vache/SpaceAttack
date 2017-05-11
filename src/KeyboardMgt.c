@@ -3,51 +3,30 @@
 
 
 enum key { UP, DOWN, LEFT, RIGHT, SHOOT, SLOW, NUM_KEY };
+
 static int keyState[NUM_KEY] = {0};
 
+static void manageMapBorder(Pelement el);
 
-void shooting()
+static void manageMapBorder(Pelement el)
 {
-  static unsigned int previous_ticks = 0;
+  if(el->mov.pos.x <= el->mov.pos.w /2)
+    el->mov.pos.x = el->mov.pos.w / 2;
 
-  // Set FPS in ms for test + adapt fire rate in function of FPS
-  if( (SDL_GetTicks() - previous_ticks) >= (FIRE_RATE / (FPS * 0.001)) )
-  {
-    Pelement shp = getShip();
-    Pelement newMissile = createElement( E_TEXT_SHIP_FIRE, 
-                                         shp->pos, 
-                                         SHIP_FIRE_SPEED, 
-                                         0, 
-                                         shp->angle,
-                                         NB_BOUNDING_BOX_FIRE_SHIP, 
-                                         setShipFireBoundingBox
-                                       );
-    // addElement() function returns the pointer to new linked list with added element
-    // update() function sets FireList pointer to list returned by add function
-    updateFireList(addElement(getFireList(),newMissile));
-    previous_ticks = SDL_GetTicks();
-  }
+  if(el->mov.pos.y <= el->mov.pos.h / 2)
+    el->mov.pos.y = el->mov.pos.h / 2;
+
+  if(el->mov.pos.x + el->mov.pos.w / 2 >= SCREEN_WIDTH)
+    el->mov.pos.x = SCREEN_WIDTH - el->mov.pos.w / 2;
+
+  if(el->mov.pos.y + el->mov.pos.h / 2 >= SCREEN_HEIGHT)
+    el->mov.pos.y = SCREEN_HEIGHT - el->mov.pos.h / 2;
 }
 
-void manageMapBorder(Pelement el)
-{
-  if(el->pos.x <= el->pos.w /2)
-    el->pos.x = el->pos.w / 2;
-
-  if(el->pos.y <= el->pos.h / 2)
-    el->pos.y = el->pos.h / 2;
-
-  if(el->pos.x + el->pos.w / 2 >= SCREEN_WIDTH)
-    el->pos.x = SCREEN_WIDTH - el->pos.w / 2;
-
-  if(el->pos.y + el->pos.h / 2 >= SCREEN_HEIGHT)
-    el->pos.y = SCREEN_HEIGHT - el->pos.h / 2;
-}
 
 void shipMove()
 {
   Pelement shp = getShip();
-  //SDL_Point center;
   int i;
   for(i = 0; i < NUM_KEY; i++)
   {
@@ -56,39 +35,42 @@ void shipMove()
       switch(i)
       {
         case UP :
-          shp->pos.y +=  round(sin(shp->angle*M_PI/180.0) * (float)shp->speed[0]);
-          shp->pos.x +=  round(cos(shp->angle*M_PI/180.0) * (float)shp->speed[0]);
+          shp->mov.pos.y += sin(shp->mov.angle*M_PI/180.0) * ADAPT_TO_FPS(shp->mov.speed.x);
+          shp->mov.pos.x += cos(shp->mov.angle*M_PI/180.0) * ADAPT_TO_FPS(shp->mov.speed.x);
           manageMapBorder(shp);
           break;
 
         case DOWN :
-          shp->pos.y += round(sin(shp->angle*M_PI/180.0) * (float)(-shp->speed[0]));
-          shp->pos.x += round(cos(shp->angle*M_PI/180.0) * (float)(-shp->speed[0]));
+          shp->mov.pos.y += sin(shp->mov.angle*M_PI/180.0) * (- ADAPT_TO_FPS(shp->mov.speed.x));
+          shp->mov.pos.x += cos(shp->mov.angle*M_PI/180.0) * (- ADAPT_TO_FPS(shp->mov.speed.x));
           manageMapBorder(shp);
           break;
 
         case LEFT :
-          shp->angle -= (float)shp->speed[1];    
-          if (shp->angle < -360 )
-            shp->angle = fmod(shp->angle,360.f);     
+          shp->mov.angle -= ADAPT_TO_FPS(shp->mov.speed.y);    
+          if (shp->mov.angle < -360 )
+            shp->mov.angle = fmod(shp->mov.angle,360.f);     
 
           break;
 
         case RIGHT :
-          shp->angle += (float)shp->speed[1];
-          if (shp->angle > 360 )
-            shp->angle = fmod(shp->angle,360.f);  
+          shp->mov.angle += ADAPT_TO_FPS(shp->mov.speed.y);
+          if (shp->mov.angle > 360 )
+            shp->mov.angle = fmod(shp->mov.angle,360.f);  
 
           break;
 
         case SHOOT :
-          shooting();
+          //shooting();
+          Element_shoot(shp, E_WEAPON_MAIN);
+          Element_shoot(shp, E_WEAPON_SECONDARY_LEFT);
+          Element_shoot(shp, E_WEAPON_SECONDARY_RIGHT);
           break;
 
         case SLOW :
-          shp->speed[0] = 2.f;
-          shp->speed[1] = 2.f;
-          printf("SLOW => speed = (%f,%f)\n", shp->speed[0], shp->speed[1]);
+          shp->mov.speed.x = 2.f;
+          shp->mov.speed.y = 2.f;
+          printf("SLOW => speed = (%f,%f)\n", shp->mov.speed.x, shp->mov.speed.y);
           break;
 
         default :
@@ -106,7 +88,7 @@ void shipMove()
 
 
 
-void updateKey()
+void updateKey( void )
 {
   SDL_Event event;
   while(SDL_PollEvent(&event))
@@ -150,7 +132,7 @@ void updateKey()
 
           default:
             //stopGame();
-            printf("Warning : Key unrecogize\n");
+            printf("Warning : Unknown key %d\n", event.key.keysym.sym);
             break;
         }
         break;
@@ -188,7 +170,7 @@ void updateKey()
 
           default:
             //stopGame();
-            printf("Warning : Key unrecogize\n");
+            printf("Warning : Unknown key %d\n", event.key.keysym.sym);
             break;
         }
         break;
@@ -198,7 +180,6 @@ void updateKey()
     }
   }
 }
-
 
 void updateEventManager()
 {

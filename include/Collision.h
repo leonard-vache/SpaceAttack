@@ -18,8 +18,8 @@ typedef struct Polygon
   SA_Point ur;   // Upper right
   SA_Point bl;   // Bottom left
   SA_Point br;   // Bottom right
-  float width;
-  float height;
+  double width;
+  double height;
 } Polygon;
 
 
@@ -27,7 +27,7 @@ typedef struct boundingbox
 {
   unsigned short int nb_box;
   Polygon *box;
-  float previous_angle;
+  double previous_angle;
   //void (*init_bbox)(Pelement);
 } BoundingBox;
 
@@ -42,10 +42,10 @@ void setEnemy1BoundingBox(BoundingBox *en_box);
 void setShipBoundingBox(BoundingBox *shp_box);
 
 //Polygon *polygonsToWorld(Pelement el);
-BoundingBox boundingBoxToWorld(BoundingBox bbox_ref, SDL_Rect pos);
+BoundingBox boundingBoxToWorld(BoundingBox bbox_ref, SA_Rect pos);
 void printPolygon(Polygon poly);
-void rotatePoint(SA_Point *p, float theta);
-void rotatePolygon(Polygon *poly, float delta_angle);
+//void Geometry_rotatePoint(SA_Point *p, double theta);
+void rotatePolygon(Polygon *poly, double delta_angle);
 void updateBoundingBox(BoundingBox *bbox, double el_angle);
 
 bool isPolygonsCollision(Polygon p1, Polygon p2);

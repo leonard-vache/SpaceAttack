@@ -1,10 +1,11 @@
 #include <unistd.h>
+#include <stdio.h>
 #include "GraphicsMgt.h"
 
 
 typedef struct explosion
 {
-  SDL_Rect pos;
+  SA_Rect pos;
   int previous_tick;
   int collision_id;
 
@@ -18,8 +19,6 @@ Explosion *getExplosionList() { return explosionListe; }
 void updateExplosionList(Explosion *ex) { explosionListe = ex; }
 
 static SP_Texture S_GameTexture[E_TEXT_NB];
-
-static void drawCenter(int x, int y);
 
 
 SDL_Texture *loadImage(char *img_path)
@@ -83,41 +82,30 @@ SDL_Texture *loadImageAlpha(char *img_path, int r, int g, int b)
 }
 
 
-void getTextureDimension (SpaceAttack_te_texture txt_id, SDL_Rect *r)
+void getTextureDimension (SpaceAttack_te_texture txt_id, SA_Rect *r)
 {
-  if(SDL_QueryTexture(S_GameTexture[txt_id].texture , NULL, NULL, &(r->w), &(r->h)) < 0) 
+  SDL_Rect sdl_r;
+  if(SDL_QueryTexture(S_GameTexture[txt_id].texture , NULL, NULL, &(sdl_r.w), &(sdl_r.h)) < 0) 
   {
     printf("Can not get texture dimension ! SDL_Error : %s", SDL_GetError());
     stopGame();
   }
+
+  r->w = (double)sdl_r.w;
+  r->h = (double)sdl_r.h;
 }
 
 
 void loadGraphics(void)
 {
-  /*
-  spTexture.background = loadImage(P_BACKGROUND);
-  spTexture.ship       = loadImageAlpha(P_SHIP,255,0,255);
-  spTexture.shipFire   = loadImageAlpha(P_SHIP_FIRE,0,0,0);
-  spTexture.enemy1     = loadImageAlpha(P_ENEMY1,0,0,0);
-  spTexture.bossLife   = loadImageAlpha(BOSS_LIFE,0,0,0);
-  int i;
-  for(i = 1; i <= NB_EXPLOSION; i++ )
-  {
-    char expl_path[256];
-    sprintf(expl_path,"%s%i.bmp",P_EXPLOSION,i);
-    spTexture.explosions[i-1] = loadImageAlpha(expl_path,0,0,0);
-  } 
-  */
-
   S_GameTexture[E_TEXT_BACKGROUND].texture = loadImage(P_BACKGROUND);
   S_GameTexture[E_TEXT_BACKGROUND].angular_offset = 90;
 
   S_GameTexture[E_TEXT_SHIP].texture = loadImageAlpha(P_SHIP,255,0,255);
   S_GameTexture[E_TEXT_SHIP].angular_offset = 90;
 
-  S_GameTexture[E_TEXT_SHIP_FIRE].texture = loadImageAlpha(P_SHIP_FIRE,0,0,0);
-  S_GameTexture[E_TEXT_SHIP_FIRE].angular_offset = 90;
+  S_GameTexture[E_TEXT_SHIP_MAIN_FIRE].texture = loadImageAlpha(P_SHIP_FIRE,0,0,0);
+  S_GameTexture[E_TEXT_SHIP_MAIN_FIRE].angular_offset = 90;
 
   S_GameTexture[E_TEXT_ENEMY1].texture = loadImageAlpha(P_ENEMY1,0,0,0);
   S_GameTexture[E_TEXT_ENEMY1].angular_offset = -90;
@@ -136,16 +124,6 @@ void loadGraphics(void)
   } 
 }
 
-/*
-void drawPolygon(Polygon poly)
-{
-  SDL_RenderDrawLine(getRenderer(),poly.ul.x, poly.ul.y, poly.ur.x, poly.ur.y);
-  SDL_RenderDrawLine(getRenderer(),poly.ur.x, poly.ur.y, poly.br.x, poly.br.y);
-  SDL_RenderDrawLine(getRenderer(),poly.br.x, poly.br.y, poly.bl.x, poly.bl.y);
-  SDL_RenderDrawLine(getRenderer(),poly.bl.x, poly.bl.y, poly.ul.x, poly.ul.y);
-}
-*/
-
 
 void drawPolygon(SA_Point ul, SA_Point ur, SA_Point br, SA_Point bl)
 {
@@ -156,7 +134,7 @@ void drawPolygon(SA_Point ul, SA_Point ur, SA_Point br, SA_Point bl)
 }
 
 
-void requestExplosion(SDL_Rect position)
+void requestExplosion(SA_Rect position)
 {
   // Creation of an explosion element. It will be destroyed by endExplosion() function.
   Explosion *ex;
@@ -172,12 +150,15 @@ void requestExplosion(SDL_Rect position)
   updateExplosionList(ex);
 }
 
+
 void endExplosion(Explosion *ex)
 {
   Explosion *pl_ex = getExplosionList();
+
   if (pl_ex == ex )
   {
     updateExplosionList(pl_ex->next);
+    free(ex);
     return;
   }
 
@@ -185,8 +166,8 @@ void endExplosion(Explosion *ex)
   {
     if ( pl_ex->next == ex )
     {
-      pl_ex->next == ex->next; // Raccordement
-      free(pl_ex);
+      pl_ex->next = ex->next; // Raccordement
+      free(ex);
       break;
     }
     pl_ex = pl_ex->next;
@@ -211,24 +192,29 @@ void drawExplosion ()
   Explosion *pl_ex = getExplosionList();
   if ( NULL == pl_ex )
     return;
-
+  
+  int tick = SDL_GetTicks();
   while ( pl_ex != NULL )
   {
-
-    int tick = SDL_GetTicks();
-
-    if ( SDL_GetTicks() - pl_ex->previous_tick > EXPLOSION_FREQUENCY )
+    if (tick - pl_ex->previous_tick > EXPLOSION_FREQUENCY )
     {
-      pl_ex->previous_tick = SDL_GetTicks();
+      pl_ex->previous_tick = tick;
       pl_ex->collision_id ++;
+
+      if ( pl_ex->collision_id > NB_EXPLOSION+E_TEXT_EXPLOSION-1)
+      {
+        endExplosion(pl_ex);
+        continue;
+      }
     }
 
-    SDL_Rect texture_ex = pl_ex->pos;
-    SDL_QueryTexture(S_GameTexture[pl_ex->collision_id].texture, NULL, NULL, &texture_ex.w, &texture_ex.h);
+    SDL_Rect texture_ex = SA_to_SDL_Rect(pl_ex->pos);
+    //getTextureDimension(S_GameTexture[pl_ex->collision_id].texture, &texture_ex);
+    SDL_QueryTexture(S_GameTexture[pl_ex->collision_id].texture, NULL, NULL, &(texture_ex.w), &(texture_ex.h) );
     
     SDL_Point center;
-    center.x = texture_ex.w / 2;
-    center.y = texture_ex.h / 2;
+    center.x = round(texture_ex.w / 2.f);
+    center.y = round(texture_ex.h / 2.f);
 
     if ( 0 > SDL_RenderCopyEx( getRenderer(),
                                S_GameTexture[pl_ex->collision_id].texture,
@@ -240,13 +226,10 @@ void drawExplosion ()
        )
     {
       printf("Error while drawing explosion. SDL Error : %s\n", SDL_GetError());
-      return;
+      break;
     }
    
-    if ( NB_EXPLOSION == pl_ex->collision_id  )
-    {
-      endExplosion(pl_ex);
-    }
+
     pl_ex = pl_ex->next;
   }
 }
@@ -266,13 +249,13 @@ void cleanGraphics(void)
 }
 
 
-void drawSATexture(SpaceAttack_te_texture txt_id, SDL_Rect pos, double angle)
+void drawSATexture(SpaceAttack_te_texture txt_id, SA_Rect pos, double angle)
 {
   SDL_Point center;
-  center.x = pos.w / 2;
-  center.y = pos.h / 2;
+  center.x = round(pos.w / 2.f);
+  center.y = round(pos.h / 2.f);
 
-  SDL_Rect texture_pos = pos;
+  SDL_Rect texture_pos = SA_to_SDL_Rect(pos);
   texture_pos.x -= pos.w / 2;
   texture_pos.y -= pos.h / 2;
 
@@ -289,11 +272,11 @@ void drawSATexture(SpaceAttack_te_texture txt_id, SDL_Rect pos, double angle)
     stopGame();
     return;
   }
-  //drawCenter(pos.x, pos.y);
+  Graphics_drawPoint(pos.x, pos.y);
 }
 
 
-static void drawCenter(int x, int y)
+void Graphics_drawPoint(int x, int y)
 {
   SDL_Rect dest;
   int size = 3;

@@ -1,14 +1,16 @@
 #include "GameMgt.h"
 
 
-SDL_Window* screen = NULL;
-SDL_Renderer* renderer = NULL;
+SDL_Window   *screen = NULL;
+SDL_Renderer *renderer = NULL;
 
-bool go = 1;
+static bool   go    = 1;
 
 void stopGame() { go = 0; }
 
+
 SDL_Renderer *getRenderer() { return renderer; }
+
 
 
 int initGame()
@@ -20,8 +22,8 @@ int initGame()
   }
 
   screen = SDL_CreateWindow("Space Attack",                   // Title
-                            SDL_WINDOWPOS_CENTERED,           // Window Position X
-                            SDL_WINDOWPOS_CENTERED,           // Window Position Y
+                            SDL_WINDOWPOS_CENTERED,           // Window mov.position X
+                            SDL_WINDOWPOS_CENTERED,           // Window mov.position Y
                             SCREEN_WIDTH, SCREEN_HEIGHT,      // Sreen width and height
                             SDL_WINDOW_OPENGL);               // SDL Flag
   renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_PRESENTVSYNC);
@@ -35,96 +37,85 @@ int initGame()
 }
 
 
-void updateListMotion(Pelement pl, ptrFunctionPelement updateList)
-{
-  Pelement pl_prev = pl;
-  Pelement pl_to_free;
-
-  while(pl != NULL)
-  {
-    if (pl->pos.y > SCREEN_HEIGHT + pl->pos.h || pl->pos.y < 0 ||
-        pl->pos.x > SCREEN_WIDTH + pl->pos.w  || pl->pos.x < 0)
-    {
-      // First element of the list
-      if(pl_prev == pl)
-      {
-        pl_prev = pl->next;
-        // Call adapted function to update
-        updateList(pl_prev);
-      }
-      else
-      {
-        // Link previous element with next one
-        pl_prev->next = pl->next;
-      }
-      pl_to_free = pl;
-      pl = pl->next;
-      free(pl_to_free);
-    }
-    else
-    {
-      pl->pos.y += sin(pl->angle*M_PI/180) * pl->speed[0];
-      pl->pos.x += cos(pl->angle*M_PI/180) * pl->speed[0];
-      pl_prev = pl;
-      pl = pl->next;
-    }
-  }
-}
-
-
-void circularMotion(Pelement el)
-{
-  el->angle = fmod(el->angle + el->speed[1],360.f);
-}
-
-void sinusoidalMotion(Pelement el)
-{
-  static double sinusoidal_angle = 0.f;
-  double sinusoidal_speed = 6.f;
-
-  el->angle = fmod(el->angle + el->speed[1] * cos(sinusoidal_angle*M_PI/180) ,360.f);
-
-  //printf("sinusoidal_angle=%f - el->speed[1]=%f - el->angle=%f\n",sinusoidal_angle, el->speed[1]*sin(sinusoidal_angle*M_PI/180), el->angle);
-  sinusoidal_angle = fmod(sinusoidal_angle + sinusoidal_speed, 360.f);
-}
-
 
 void enemy1Pattern()
 {
   Pelement pl_enn = getEnemy1List();
+  Pelement ship = getShip();
   while(pl_enn != NULL)
   {
-    //circularMotion(pl_enn);
-    sinusoidalMotion(pl_enn);
+    //circularPattern(&pl_enn->mov);
+    //sinusoidalPattern(&pl_enn->mov);
+    //followerPattern(ship->mov, &pl_enn->mov);
+
     pl_enn = pl_enn->next;
   }
-  updateListMotion(getEnemy1List(),updateEnemy1List);
 }
 
 
 
 void loadGame() 
 {
-  SDL_Rect r;
+  SA_Rect r;
 
   r.x = SCREEN_WIDTH / 2;
   r.y = SCREEN_HEIGHT / 2;
-  updateMap( createElement(E_TEXT_BACKGROUND, r, 0, 0, -90.0, NB_BOUNDING_BOX_MAP, setMapBoundingBox) );
+  updateMap( createElement( E_TEXT_BACKGROUND, 
+                            r, 0, 0, -90.0, 
+                            0,
+                            NB_BOUNDING_BOX_MAP, setMapBoundingBox
+                          ) 
+           );
 
-  Pelement map2 = getMap();
-  if (map2 == NULL)
-    printf("Map NULL !!!\n");
-
-  r.x = 300;
-  r.y = 600;
-  updateShip( createElement(E_TEXT_SHIP, r, SHIP_LINEAR_VELOCITY, SHIP_ANGULAR_VELOCITY, -90.0, NB_BOUNDING_BOX_SHIP, setShipBoundingBox) );
+  r.x = SCREEN_WIDTH / 2;
+  r.y = SCREEN_HEIGHT - 50;
+  updateShip( createElement( E_TEXT_SHIP, 
+                             r, SHIP_LINEAR_VELOCITY, SHIP_ANGULAR_VELOCITY, -90.f, 
+                             SHIP_LIFE,
+                             NB_BOUNDING_BOX_SHIP, setShipBoundingBox
+                           ) 
+            );
   //ship->bbox.init_bbox = setShipBoundingBox;
+  Pelement ship = getShip();
+  ship->weapon.desc[E_WEAPON_MAIN].weaponTexture = E_TEXT_SHIP_MAIN_FIRE;
+  ship->weapon.desc[E_WEAPON_MAIN].setWeaponBBox = setShipFireBoundingBox;
+  ship->weapon.desc[E_WEAPON_MAIN].damage        = SHIP_FIRE_DAMAGE;
+  ship->weapon.desc[E_WEAPON_MAIN].fireRate      = SHIP_FIRE_RATE;
+  ship->weapon.desc[E_WEAPON_MAIN].fireSpeed     = SHIP_FIRE_SPEED;
+  ship->weapon.desc[E_WEAPON_MAIN].spot.x        = 0.f;
+  ship->weapon.desc[E_WEAPON_MAIN].spot.y        = 0.f;
 
-  r.x = 300;
-  r.y = 30;
-  Pelement newEnemy1 = createElement(E_TEXT_ENEMY1, r, ENEMY1_LINEAR_VELOCITY, ENEMY1_ANGULAR_VELOCITY, 90.0, NB_BOUNDING_BOX_ENEMY1, setEnemy1BoundingBox);
-  //newEnemy1->bbox.init_bbox = setEnemy1BoundingBox;
-  updateEnemy1List(addElement(getEnemy1List(),newEnemy1));
+  ship->weapon.desc[E_WEAPON_SECONDARY_RIGHT].weaponTexture = E_TEXT_SHIP_MAIN_FIRE;
+  ship->weapon.desc[E_WEAPON_SECONDARY_RIGHT].setWeaponBBox = setShipFireBoundingBox;
+  ship->weapon.desc[E_WEAPON_SECONDARY_RIGHT].damage        = SHIP_FIRE_DAMAGE;
+  ship->weapon.desc[E_WEAPON_SECONDARY_RIGHT].fireRate      = SHIP_FIRE_RATE/2.f;
+  ship->weapon.desc[E_WEAPON_SECONDARY_RIGHT].fireSpeed     = SHIP_FIRE_SPEED;
+  ship->weapon.desc[E_WEAPON_SECONDARY_RIGHT].spot.x        = -ship->mov.pos.w/2.f;
+  ship->weapon.desc[E_WEAPON_SECONDARY_RIGHT].spot.y        = ship->mov.pos.h/4.f;
+
+  ship->weapon.desc[E_WEAPON_SECONDARY_LEFT].weaponTexture = E_TEXT_SHIP_MAIN_FIRE;
+  ship->weapon.desc[E_WEAPON_SECONDARY_LEFT].setWeaponBBox = setShipFireBoundingBox;
+  ship->weapon.desc[E_WEAPON_SECONDARY_LEFT].damage        = SHIP_FIRE_DAMAGE;
+  ship->weapon.desc[E_WEAPON_SECONDARY_LEFT].fireRate      = SHIP_FIRE_RATE/2.f;
+  ship->weapon.desc[E_WEAPON_SECONDARY_LEFT].fireSpeed     = SHIP_FIRE_SPEED;
+  ship->weapon.desc[E_WEAPON_SECONDARY_LEFT].spot.x        = -ship->mov.pos.w/2.f;
+  // Attention a l'offset 90 degré lié a l'affichage
+  ship->weapon.desc[E_WEAPON_SECONDARY_LEFT].spot.y        = -ship->mov.pos.h/4.f;
+
+  Element_activateWeapon(ship, E_WEAPON_MAIN);
+  Element_activateWeapon(ship, E_WEAPON_SECONDARY_LEFT);
+  Element_activateWeapon(ship, E_WEAPON_SECONDARY_RIGHT);
+  
+  
+
+  r.x = SCREEN_WIDTH / 2;
+  r.y = 50;
+  Pelement newEnemy1 = createElement( E_TEXT_ENEMY1, 
+                                      r, ENEMY1_LINEAR_VELOCITY, ENEMY1_ANGULAR_VELOCITY, 90.f, 
+                                      ENEMY1_LIFE,
+                                      NB_BOUNDING_BOX_ENEMY1, setEnemy1BoundingBox
+                                    );
+  updateEnemy1List(addElement(getEnemy1List(), newEnemy1));
 }
 
 
@@ -148,7 +139,7 @@ void delay(unsigned int frameLimit)
 void showBBox(Pelement el)
 {
   // Warning boundingBoxToWorld alloate pointer
-  BoundingBox bbox = boundingBoxToWorld(el->bbox, el->pos);
+  BoundingBox bbox = boundingBoxToWorld(el->bbox, el->mov.pos);
 
   int i;
   for(i = 0; i < bbox.nb_box; i++)
@@ -164,31 +155,49 @@ void showBBox(Pelement el)
 
 void displayGame(void)
 { 
+  // Get Objects
+  Pelement map  = getMap();
+  Pelement shp  = getShip();
+  Pelement enn1 = getEnemy1List();
+  /*
   // Clean the Window
   SDL_RenderClear(renderer);
   // Draw background
-  Pelement map = getMap();
-  drawSATexture (map->texture_id, map->pos, map->angle);
+  drawSATexture (map->texture_id, map->mov.pos, map->mov.angle);
   // Draw missiles
   Pelement pl_fire = getFireList();
   while(pl_fire != NULL)
   {
-    drawSATexture (pl_fire->texture_id, pl_fire->pos, pl_fire->angle);
-    showBBox(pl_fire);
+    drawSATexture (pl_fire->texture_id, pl_fire->mov.pos, pl_fire->mov.angle);
+    //showBBox(pl_fire);
     pl_fire = pl_fire->next;
   }
+
   // Draw enemies ship
   Pelement pl_en = getEnemy1List();
   while(pl_en != NULL)
   {
-    drawSATexture (pl_en->texture_id, pl_en->pos, pl_en->angle);
-    showBBox(pl_en);
+    drawSATexture (pl_en->texture_id, pl_en->mov.pos, pl_en->mov.angle);
+    //showBBox(pl_en);
     pl_en = pl_en->next;
   }
   // Draw gamer ship
   Pelement ship = getShip(); 
-  drawSATexture (ship->texture_id, ship->pos, ship->angle);
-  showBBox(ship);
+  drawSATexture (ship->texture_id, ship->mov.pos, ship->mov.angle);
+  //showBBox(ship);
+  */
+  Element_draw(map);
+  Element_draw(enn1);
+  Element_draw(shp);
+  /*
+  SA_Point rspot;
+      rspot.x = shp->weapon.desc[E_WEAPON_SECONDARY_RIGHT].spot.x;
+      rspot.y = shp->weapon.desc[E_WEAPON_SECONDARY_RIGHT].spot.y;
+      Geometry_rotatePoint(&rspot, M_PI/180.f * shp->mov.angle);
+      rspot.x += shp->mov.pos.x;
+      rspot.y += shp->mov.pos.y;
+ Graphics_drawPoint(rspot.x,rspot.y);
+ */
 
   drawExplosion();
   // Set red render for Bounding box dsplay
@@ -202,33 +211,47 @@ void displayGame(void)
 void checkCollisions()
 { 
   Pelement ship = getShip();
-  updateBoundingBox(&(ship->bbox), ship->angle);
+  updateBoundingBox(&(ship->bbox), ship->mov.angle);
 
   Pelement pl_enn = getEnemy1List();
   while(pl_enn != NULL)
   {
-    updateBoundingBox(&(pl_enn->bbox), pl_enn->angle);
-    //Check collision between ship and enemy
-    if( isElementsCollision(pl_enn, getShip()) )
+    if (pl_enn->life > 0)
     {
-      requestExplosion(pl_enn->pos);
-      moveElementOutOfRange(pl_enn);
-      break;
-    }
-    // Check Collison entre ennemy and missile
-    Pelement pl_fire = getFireList();
-    while(pl_fire != NULL)
-    {
-      updateBoundingBox(&(pl_fire->bbox), pl_fire->angle);
-      if(isElementsCollision(pl_fire, pl_enn))
+      updateBoundingBox(&(pl_enn->bbox), pl_enn->mov.angle);
+      //Check collision between ship and enemy
+      if( isElementsCollision(pl_enn, getShip()) )
       {
-        requestExplosion(pl_enn->pos);
-        moveElementOutOfRange(pl_enn);
-        moveElementOutOfRange(pl_fire);
+        ship->life -= pl_enn->life;
+        pl_enn->life = 0;
+        if (pl_enn->life <= 0)
+          requestExplosion(pl_enn->mov.pos);
+
+        //moveElementOutOfRange(pl_enn);
+
         break;
       }
-      else 
-        pl_fire = pl_fire->next;
+      // Check Collison between ennemy and missile
+      Pelement pl_fire = getFireList();
+      while(pl_fire != NULL)
+      {
+        updateBoundingBox(&(pl_fire->bbox), pl_fire->mov.angle);
+        if(isElementsCollision(pl_fire, pl_enn))
+        {
+          printf("Collision - ennemy life = %d - fire_life = %d\n", pl_enn->life, pl_fire->life);
+          pl_enn->life -= pl_fire->life;
+          pl_fire->life = 0;
+   
+          requestExplosion(pl_enn->mov.pos);
+
+          printf("Collision - ennemy life = %d - fire_life = %d\n", pl_enn->life, pl_fire->life);
+          //moveElementOutOfRange(pl_enn);
+          //moveElementOutOfRange(pl_fire);
+          break;
+        }
+        else 
+          pl_fire = pl_fire->next;
+      }
     }
     pl_enn = pl_enn->next;
   }
@@ -241,14 +264,25 @@ void mainGameLoop(int frameLimit)
   
   while(go)
   {
-    //printf("Tic = %d\n",SDL_GetTicks());
+    //printf("Tic = %u\n",SDL_GetTicks());
     updateEventManager();
-    updateListMotion(getFireList(),updateFireList);
+    Element_updateMotion(getFireList());
+    //updateListMotion(getFireList(),updateFireList);
     enemy1Pattern();
+    Element_updateMotion(getEnemy1List());
+    //updateListMotion(getEnemy1List(),updateEnemy1List);
+
     checkCollisions();
+    printf("Element_collectGarbage(getFireList())\n");
+    Element_collectGarbage(getFireList(), updateFireList);
+    printf("Element_collectGarbage(getEnemy1List())\n");
+    Element_collectGarbage(getEnemy1List(), updateEnemy1List);
+    printf("Element_collectGarbage(getShip())\n");
+    Element_collectGarbage(getShip(), updateShip);
+
     displayGame();
-    //printf("Toc = %d\n",SDL_GetTicks());
-    //printf("######################################\n");
+    //printf("Toc = %u\n",SDL_GetTicks());
+    printf("######################################\n");
     delay(next_frameLimit);
     next_frameLimit = SDL_GetTicks() + frameLimit;  
   }
@@ -260,8 +294,8 @@ void cleanGame()
 {
   cleanGraphics();
   printf("Graphics cleaned\n");
-  deleteListOfElement(getFireList());
-  deleteListOfElement(getEnemy1List());
+  Element_deleteList(getFireList());
+  Element_deleteList(getEnemy1List());
   printf("Lists cleaned\n");
   free(getShip());
   free(getMap());

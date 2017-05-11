@@ -29,7 +29,7 @@ typedef enum SA_te_texture
 {
   E_TEXT_BACKGROUND,
   E_TEXT_SHIP,
-  E_TEXT_SHIP_FIRE,
+  E_TEXT_SHIP_MAIN_FIRE,
   E_TEXT_ENEMY1,
   E_TEXT_EXPLOSION,
   E_TEXT_BOSS_LIFE = NB_EXPLOSION + E_TEXT_EXPLOSION, 
@@ -40,9 +40,11 @@ typedef enum SA_te_texture
 SDL_Texture *loadImage(char *img_path);
 SDL_Texture *loadImageAlpha(char *img_path, int r, int g, int b);
 void cleanGraphics(void);
-void drawSATexture(SpaceAttack_te_texture txt_id, SDL_Rect pos, double angle);
+void drawSATexture(SpaceAttack_te_texture txt_id, SA_Rect pos, double angle);
 void drawPolygon(SA_Point ul, SA_Point ur, SA_Point br, SA_Point bl);
+void Graphics_drawPoint(int x, int y);
 
-void requestExplosion(SDL_Rect position);
+void requestExplosion(SA_Rect position);
+void getTextureDimension (SpaceAttack_te_texture txt_id, SA_Rect *r);
 
 #endif

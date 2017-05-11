@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/home/leo/Git_Project/SpaceAttack/src/Geometry.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/Geometry.c.o"
   "/home/leo/Git_Project/SpaceAttack/src/GraphicsMgt.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/GraphicsMgt.c.o"
   "/home/leo/Git_Project/SpaceAttack/src/KeyboardMgt.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/KeyboardMgt.c.o"
+  "/home/leo/Git_Project/SpaceAttack/src/Motion.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/Motion.c.o"
   "/home/leo/Git_Project/SpaceAttack/src/main.c" "/home/leo/Git_Project/SpaceAttack/CMakeFiles/SpaceAttack.dir/src/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")

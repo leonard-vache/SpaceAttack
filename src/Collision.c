@@ -14,13 +14,13 @@ void setShipFireBoundingBox(BoundingBox *fire_box)
     return;
   }
 
-  SDL_Rect fire;
-  getTextureDimension(E_TEXT_SHIP_FIRE, &fire);
+  SA_Rect fire;
+  getTextureDimension(E_TEXT_SHIP_MAIN_FIRE, &fire);
 
   fire_box->box[0].ul.x = -fire.w / 2.f;
   fire_box->box[0].ul.y = -fire.h / 2.f;
-  fire_box->box[0].width = (float)fire.w;
-  fire_box->box[0].height = (float)fire.h;
+  fire_box->box[0].width = (double)fire.w;
+  fire_box->box[0].height = (double)fire.h;
 
   fire_box->box[0].ur.x = fire_box->box[0].ul.x + fire_box->box[0].width;
   fire_box->box[0].ur.y = fire_box->box[0].ul.y;
@@ -42,7 +42,7 @@ void setEnemy1BoundingBox(BoundingBox *en_box)
     return;
   }
 
-  SDL_Rect en;
+  SA_Rect en;
   getTextureDimension(E_TEXT_ENEMY1, &en);
 
   //                            0--->
@@ -72,7 +72,7 @@ void setEnemy1BoundingBox(BoundingBox *en_box)
   */
   en_box->box[1].ul.x = -en.w / 2.f;
   en_box->box[1].ul.y = -25.f;
-  en_box->box[1].width = (float)en.w;
+  en_box->box[1].width = (double)en.w;
   en_box->box[1].height = 32.f;
 
   en_box->box[1].ur.x = en_box->box[1].ul.x + en_box->box[1].width;
@@ -97,7 +97,7 @@ void setShipBoundingBox(BoundingBox *shp_box)
     return;
   }
 
-  SDL_Rect shp;
+  SA_Rect shp;
   getTextureDimension(E_TEXT_SHIP, &shp);
 
   // First bounding box. Polygon point are set in ship referentiel
@@ -117,10 +117,10 @@ void setShipBoundingBox(BoundingBox *shp_box)
 
   // Second Bounding box
   // Remove fin from Bounding Box
-  float fin = 6.f;
+  double fin = 6.f;
   shp_box->box[1].ul.x = -shp.w / 2.f + fin ;
   shp_box->box[1].ul.y = -3.f;
-  shp_box->box[1].width = (float)shp.w - 2 * fin;
+  shp_box->box[1].width = (double)shp.w - 2 * fin;
   shp_box->box[1].height = 29.f;
 
   shp_box->box[1].ur.x = shp_box->box[1].ul.x + shp_box->box[1].width;
@@ -134,7 +134,7 @@ void setShipBoundingBox(BoundingBox *shp_box)
 }
 
 
-BoundingBox boundingBoxToWorld(BoundingBox bbox_ref, SDL_Rect pos)
+BoundingBox boundingBoxToWorld(BoundingBox bbox_ref, SA_Rect pos)
 {
   BoundingBox bbox;
   bbox.nb_box = bbox_ref.nb_box;
@@ -145,41 +145,22 @@ BoundingBox boundingBoxToWorld(BoundingBox bbox_ref, SDL_Rect pos)
   for (i = 0; i < bbox.nb_box; i++)
   {
     bbox.box[i] = bbox_ref.box[i];
-    //poly[i].width = el->bbox.box[i].width,
-    //poly[i].height = el->bbox.box[i].height;
-    /*
-    poly[i].ul = SA_Point_to_SDL_World(poly[i].ul, el->pos);
-    poly[i].ur = SA_Point_to_SDL_World(poly[i].ur, el->pos);
-    poly[i].bl = SA_Point_to_SDL_World(poly[i].bl, el->pos);
-    poly[i].br = SA_Point_to_SDL_World(poly[i].br, el->pos);
-    */
     SA_Point_to_SDL_World(&bbox.box[i].ul, pos);
     SA_Point_to_SDL_World(&bbox.box[i].ur, pos);
     SA_Point_to_SDL_World(&bbox.box[i].bl, pos);
     SA_Point_to_SDL_World(&bbox.box[i].br, pos);
-    //printf("%s \n",__FUNCTION__);
   }
- // printf("\n");
+  
   return bbox;
 }
 
 
-void rotatePoint(SA_Point *p, float theta)
-{
-  float x = p->x;
-  float y = p->y;
-
-  p->x = x * cos(theta) - y * sin(theta);
-  p->y = x * sin(theta) + y * cos(theta);
-}
-
-
-void rotatePolygon(Polygon *poly, float delta_angle)
+void rotatePolygon(Polygon *poly, double delta_angle)
 {  
-  rotatePoint(&(poly->ul), delta_angle);
-  rotatePoint(&(poly->ur), delta_angle);
-  rotatePoint(&(poly->bl), delta_angle);
-  rotatePoint(&(poly->br), delta_angle);
+  Geometry_rotatePoint(&(poly->ul), delta_angle);
+  Geometry_rotatePoint(&(poly->ur), delta_angle);
+  Geometry_rotatePoint(&(poly->bl), delta_angle);
+  Geometry_rotatePoint(&(poly->br), delta_angle);
 }
 
 void printPolygon(Polygon poly)
@@ -223,7 +204,7 @@ bool isPolygonsCollision(Polygon p1, Polygon p2)
       vector_to_test.x = p1_t[i].x - p2_t[j].x;
       vector_to_test.y = p1_t[i].y - p2_t[j].y;
 
-      float cross_product2 = vector_cote_poly.x * vector_to_test.y - vector_cote_poly.y * vector_to_test.x;
+      double cross_product2 = vector_cote_poly.x * vector_to_test.y - vector_cote_poly.y * vector_to_test.x;
 
       // Si au moins un point se trouve à gauche => en dehors du polygone => pas de collisions 
       if (cross_product2 <= 0)

@@ -6,23 +6,30 @@
 #include <stdbool.h>
 #include <SDL.h>
 
-//#include "Element.h"
-
 
 // Screen size in pixels
 #define SCREEN_WIDTH            600    
 #define SCREEN_HEIGHT           700   
                             
-//#define RPM 200          // Round Per Minutes
-#define FPS                     30                   
-#define FIRE_RATE               10  // Frame per Fire (1 fire every X frame)
-#define SHIP_FIRE_SPEED         18
-#define SHIP_ANGULAR_VELOCITY   6  // Express in pixel per frame, to adapt ...
-#define SHIP_LINEAR_VELOCITY    8
+#define FPS                     30  // Frame per second
+#define ADAPT_TO_FPS(x)         (x) / FPS 
 
-#define ENEMY1_FIRE_SPEED       18
-#define ENEMY1_ANGULAR_VELOCITY 5  // Express in pixel per frame, to adapt ...
-#define ENEMY1_LINEAR_VELOCITY  4
+#define SHIP_MAX_WEAPON         3
+// Velocity are expressed in Pixel per second
+#define SHIP_FIRE_RATE          4  // Fire frequency (fire/seconde)
+#define SHIP_FIRE_SPEED         550  
+#define SHIP_FIRE_DAMAGE        5
+#define SHIP_ANGULAR_VELOCITY   180
+#define SHIP_LINEAR_VELOCITY    250
+
+#define ENEMY1_FIRE_RATE        60
+#define ENEMY1_FIRE_SPEED       550
+#define ENEMY1_DAMAGE           2
+#define ENEMY1_ANGULAR_VELOCITY 250  // Express in pixel per frame, to adapt ...
+#define ENEMY1_LINEAR_VELOCITY  150
+
+#define SHIP_LIFE               50   
+#define ENEMY1_LIFE             10
 
 
 extern SDL_Renderer *getRenderer();

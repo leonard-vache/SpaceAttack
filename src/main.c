@@ -1,5 +1,6 @@
 #include "Common.h"
-#include "Prototypes.h" 
+#include "GameMgt.h"
+
 
 int main(int argc, char *argv[])
 {
