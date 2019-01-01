@@ -35,8 +35,7 @@ typedef struct
   unsigned int           previousFire;
   double                 fireSpeed;
   /* Absolute position onto Element */
-  SA_Rect                spot;
-
+  SA_Point               spot;
 } ts_Weapon_descriptor;
 
 typedef struct
@@ -63,6 +62,8 @@ extern void updateMap(Pelement mp);
 extern Pelement getShip();
 extern void updateShip(Pelement sh);
 
+extern Pelement getMissilesList( Pelement el );
+
 extern Pelement getFireList();
 extern void updateFireList(Pelement fl);
 
@@ -77,8 +78,14 @@ Pelement createElement(SpaceAttack_te_texture txt_id,
 Pelement addElement(Pelement pliste, Pelement el);
 Pelement extract(Pelement pliste, Pelement el);
 
-void Element_deleteList(Pelement pliste);
-bool isElementsCollision(Pelement el1, Pelement el2);
+void Element_showBBox(Pelement el);
+void Element_draw(Pelement el);
+void Element_deleteOne(Pelement el);
+void Element_deleteAll(Pelement pliste);
+bool Element_isCollision(Pelement el1, Pelement el2);
 void Element_collectGarbage(Pelement list, ptrFunctionPelement updateList);
+void Element_shoot(Pelement el, te_Weapon_id weap_id);
+void Element_activateWeapon( Pelement el, te_Weapon_id weap_id );
+void Element_updateMotion(Pelement el);
 
 #endif

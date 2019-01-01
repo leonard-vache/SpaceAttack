@@ -62,9 +62,11 @@ SA_Rect SDL_to_SA_Rect(SDL_Rect sdl_r)
 SA_Rect SA_Point_to_SA_Rect(SA_Point p)
 {
   SA_Rect r;
-  memset(&r, 0, sizeof(SA_Point));
+  //memset(&r, 0, sizeof(SA_Point));
   r.x = p.x;
   r.y = p.y;
+  r.w = 0;
+  r.h = 0;
 
   return r;
 }
@@ -128,9 +130,4 @@ void Geometry_rotateRect(SA_Point *r, double theta)
   r->x = x * cos(theta) - y * sin(theta);
   r->y = x * sin(theta) + y * cos(theta);
 }
-
-
-
-
-
 

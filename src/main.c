@@ -1,3 +1,4 @@
+#include <time.h>
 #include "Common.h"
 #include "GameMgt.h"
 
@@ -6,14 +7,14 @@ int main(int argc, char *argv[])
 {
   unsigned int frameLimit = 1000 / FPS;
   srand(time(NULL));
-  //atexit(cleanGame);
+  //atexit(Game_clean);
 
-  if(! initGame()) return EXIT_FAILURE;
-  loadGraphics();
-  loadGame();
+  if(! Game_initSDL()) return EXIT_FAILURE;
+  Graphics_loadImages();
+  Game_loadObjects();
 
-  mainGameLoop(frameLimit);
+  Game_mainLoop(frameLimit);
 
-  cleanGame();
+  Game_clean();
   return EXIT_SUCCESS;
 }

@@ -3,18 +3,19 @@
 
 #include "Common.h"
 #include "Element.h"
-#include "KeyboardMgt.h"
 
 
+int Game_initSDL();
 
-int initGame();
-void loadGame();
-void stopGame();
-void cleanGame();
+void Game_stop();
+void Game_setPause(bool p);
+
 void delay(unsigned int frameLimit);
 void drawGame(void);
 void enemy1Pattern(void);
-void mainGameLoop(int frameLimit);
+void Game_loadObjects();
+void Game_mainLoop(int frameLimit);
+void Game_clean();
 
 
 // Prend en deuxième argument une fonctin de type ptrFunctionPelement

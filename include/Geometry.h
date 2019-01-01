@@ -33,6 +33,7 @@ SA_Rect   SA_Rect_subtraction(SA_Rect sa_r1, SA_Rect sa_r2);
 SA_Rect   SA_Rect_add(SA_Rect sa_r1, SA_Rect sa_r2);
 
 void      Geometry_rotatePoint(SA_Point *p, double theta);
+void      Geometry_rotateRect(SA_Point *r, double theta);
 
 void      SA_Point_to_SDL_World(SA_Point *sa_p, SA_Rect sa_r);
 

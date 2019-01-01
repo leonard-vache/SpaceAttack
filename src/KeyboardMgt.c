@@ -1,16 +1,24 @@
 #include "KeyboardMgt.h"
 
+#include "Element.h"
+#include "GameMgt.h"
 
 
-enum key { UP, DOWN, LEFT, RIGHT, SHOOT, SLOW, NUM_KEY };
 
-static int keyState[NUM_KEY] = {0};
+enum key { UP, DOWN, LEFT, RIGHT, SHOOT, SLOW, PAUSE, NUM_KEY };
+
+static int S_KeyState[NUM_KEY] = {0};
+
+/* SDL ticks passed while game was paused */
+static unsigned int S_DeltaTick = 0;
 
 static void manageMapBorder(Pelement el);
+static void pauseEvent();
+
 
 static void manageMapBorder(Pelement el)
 {
-  if(el->mov.pos.x <= el->mov.pos.w /2)
+  if(el->mov.pos.x <= el->mov.pos.w / 2)
     el->mov.pos.x = el->mov.pos.w / 2;
 
   if(el->mov.pos.y <= el->mov.pos.h / 2)
@@ -24,13 +32,41 @@ static void manageMapBorder(Pelement el)
 }
 
 
-void shipMove()
+unsigned int Keybord_getTick()
+{
+  return (SDL_GetTicks() - S_DeltaTick);
+}
+
+
+static void pauseEvent()
+{
+  /* SDL tick when gam is paused */
+  static unsigned int s_pausedTick = 0;
+  /* Put Game in pause */
+  Game_setPause(S_KeyState[PAUSE]);
+
+  if (1 == S_KeyState[PAUSE])
+  {
+    /* Game is paused */
+    s_pausedTick = SDL_GetTicks();
+    printf ("**** GAME PAUSES ***\n");
+  }
+  else
+  {
+    /* Resume game => compute time elapsed during pause */
+    S_DeltaTick += SDL_GetTicks() - s_pausedTick;
+    printf ("**** GAME RESUMES ***\n");
+  }
+}
+
+
+void Keyboard_handleShipEvent()
 {
   Pelement shp = getShip();
   int i;
   for(i = 0; i < NUM_KEY; i++)
   {
-    if(keyState[i] == 1)
+    if(S_KeyState[i] == 1)
     {
       switch(i)
       {
@@ -50,18 +86,15 @@ void shipMove()
           shp->mov.angle -= ADAPT_TO_FPS(shp->mov.speed.y);    
           if (shp->mov.angle < -360 )
             shp->mov.angle = fmod(shp->mov.angle,360.f);     
-
           break;
 
         case RIGHT :
           shp->mov.angle += ADAPT_TO_FPS(shp->mov.speed.y);
           if (shp->mov.angle > 360 )
             shp->mov.angle = fmod(shp->mov.angle,360.f);  
-
           break;
 
-        case SHOOT :
-          //shooting();
+        case SHOOT : 
           Element_shoot(shp, E_WEAPON_MAIN);
           Element_shoot(shp, E_WEAPON_SECONDARY_LEFT);
           Element_shoot(shp, E_WEAPON_SECONDARY_RIGHT);
@@ -73,14 +106,9 @@ void shipMove()
           printf("SLOW => speed = (%f,%f)\n", shp->mov.speed.x, shp->mov.speed.y);
           break;
 
-        default :
-          printf("Error unknown motion\n");
-          stopGame();
-          break;
-
       } // End switch(i)
 
-    } // End if(keyState[i] == 1)
+    } // End if(S_KeyState[i] == 1)
 
   } // End for(i = 0; i < NUM_KEY; i++)
   
@@ -88,50 +116,57 @@ void shipMove()
 
 
 
-void updateKey( void )
+void Keyboard_updateEvent( void )
 {
   SDL_Event event;
+
   while(SDL_PollEvent(&event))
   {
     switch(event.type)
     {
       case SDL_QUIT:
-        stopGame();
+        printf( "SDL_QUIT event received \n");
+        Game_stop();
         break;
 
       case SDL_KEYDOWN:
         switch(event.key.keysym.sym)
         {
           case SDLK_ESCAPE:
-            stopGame();
+            Game_stop();
             break;
 
           case SDLK_SPACE:
-            keyState[SHOOT] = 1;
+            S_KeyState[SHOOT] = 1;
+            break;
+
+          case SDLK_p:
+            S_KeyState[PAUSE] = !S_KeyState[PAUSE];
+            pauseEvent();         
             break;
 
           case SDLK_RSHIFT:
-            keyState[SLOW] = 1;
+            S_KeyState[SLOW] = 1;
             break;
 
           case SDLK_UP:
-            keyState[UP] = 1;
+            S_KeyState[UP] = 1;
             break;
 
           case SDLK_DOWN:
-            keyState[DOWN] = 1;
+            S_KeyState[DOWN] = 1;
             break;
 
           case SDLK_LEFT: 
-            keyState[LEFT] = 1;
+            S_KeyState[LEFT] = 1;
             break;
 
           case SDLK_RIGHT:
-            keyState[RIGHT] = 1;
+            S_KeyState[RIGHT] = 1;
             break;
 
           default:
-            //stopGame();
+            //Game_stop();
             printf("Warning : Unknown key %d\n", event.key.keysym.sym);
             break;
         }
@@ -141,37 +176,33 @@ void updateKey( void )
         switch(event.key.keysym.sym)
         {
           case SDLK_ESCAPE:
-            stopGame();
+            Game_stop();
             break;
 
           case SDLK_SPACE:
-            keyState[SHOOT] = 0;
+            S_KeyState[SHOOT] = 0;
             break;
 
           case SDLK_RSHIFT:
-            keyState[SLOW] = 0;
+            S_KeyState[SLOW] = 0;
             break;
 
           case SDLK_UP: 
-            keyState[UP] = 0;
+            S_KeyState[UP] = 0;
             break;
 
           case SDLK_DOWN:
-            keyState[DOWN] = 0;
+            S_KeyState[DOWN] = 0;
             break;
 
           case SDLK_LEFT: 
-            keyState[LEFT] = 0;
+            S_KeyState[LEFT] = 0;
             break;
 
           case SDLK_RIGHT:
-            keyState[RIGHT] = 0;
+            S_KeyState[RIGHT] = 0;
             break;
 
-          default:
-            //stopGame();
-            printf("Warning : Unknown key %d\n", event.key.keysym.sym);
-            break;
         }
         break;
       
@@ -181,9 +212,4 @@ void updateKey( void )
   }
 }
 
-void updateEventManager()
-{
-  updateKey();
-  shipMove();
-}
  

@@ -33,4 +33,4 @@ file(
 add_executable( ${PROJECT_NAME} ${src_file} )
 
 #Configuration lors de l'édition des liens
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY} -lm)
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY} -lSDL2_image -lm)

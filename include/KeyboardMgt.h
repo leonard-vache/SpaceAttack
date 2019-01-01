@@ -3,10 +3,11 @@
 
 
 #include "Common.h"
-#include "Element.h"
 
 
+unsigned int Keybord_getTick( void );
+void Keyboard_updateEvent( void );
+void Keyboard_handleShipEvent( void );
 
-void updateKey(void);
 
 #endif

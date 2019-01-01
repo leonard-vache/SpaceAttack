@@ -4,10 +4,11 @@
 #include "Common.h"
 #include "Geometry.h"
 
-#define NB_BOUNDING_BOX_SHIP      2
-#define NB_BOUNDING_BOX_ENEMY1    2
-#define NB_BOUNDING_BOX_FIRE_SHIP 1
-#define NB_BOUNDING_BOX_MAP       0
+#define NB_BOUNDING_BOX_SHIP             2
+#define NB_BOUNDING_BOX_ENEMY1           2
+#define NB_BOUNDING_BOX_SHIP_MAIN_FIRE   1
+#define NB_BOUNDING_BOX_ENEMY1_MAIN_FIRE 1
+#define NB_BOUNDING_BOX_MAP              0
 
 #define NB_POINTS_POLYGON         4
 
@@ -37,14 +38,14 @@ typedef void (*ptrFunctionBoundingBox)(BoundingBox *);
 
 
 void setMapBoundingBox(BoundingBox *map_box);
-void setShipFireBoundingBox(BoundingBox *fire_box);
+void setShipMainFireBoundingBox(BoundingBox *fire_box);
+void setEnemy1MainFireBoundingBox(BoundingBox *enn_fire_box);
 void setEnemy1BoundingBox(BoundingBox *en_box);
 void setShipBoundingBox(BoundingBox *shp_box);
 
 //Polygon *polygonsToWorld(Pelement el);
 BoundingBox boundingBoxToWorld(BoundingBox bbox_ref, SA_Rect pos);
 void printPolygon(Polygon poly);
-//void Geometry_rotatePoint(SA_Point *p, double theta);
 void rotatePolygon(Polygon *poly, double delta_angle);
 void updateBoundingBox(BoundingBox *bbox, double el_angle);
 

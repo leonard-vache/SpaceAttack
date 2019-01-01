@@ -1,16 +1,17 @@
 #include "Collision.h"
 #include "GraphicsMgt.h"
+#include "GameMgt.h"
 
 
 
 void setMapBoundingBox(BoundingBox *map_box) {}
 
-void setShipFireBoundingBox(BoundingBox *fire_box)
+void setShipMainFireBoundingBox(BoundingBox *fire_box)
 {
-  if (fire_box->nb_box != NB_BOUNDING_BOX_FIRE_SHIP)
+  if (fire_box->nb_box != NB_BOUNDING_BOX_SHIP_MAIN_FIRE)
   {
-    printf("Error in setShipFireBoundingBox 1 BoundingBox is expected\n");
-    stopGame();
+    printf("Error in %s %d BoundingBox is expected\n", __FUNCTION__, NB_BOUNDING_BOX_SHIP_MAIN_FIRE);
+    Game_stop();
     return;
   }
 
@@ -33,12 +34,40 @@ void setShipFireBoundingBox(BoundingBox *fire_box)
 }
 
 
+void setEnemy1MainFireBoundingBox(BoundingBox *enn_fire_box)
+{
+  if (enn_fire_box->nb_box != NB_BOUNDING_BOX_ENEMY1_MAIN_FIRE)
+  {
+    printf("%s : Error %d BoundingBox is expected\n", __FUNCTION__, NB_BOUNDING_BOX_ENEMY1_MAIN_FIRE);
+    Game_stop();
+    return;
+  }
+
+  SA_Rect fire;
+  getTextureDimension(E_TEXT_SHIP_MAIN_FIRE, &fire);
+
+  enn_fire_box->box[0].ul.x = -fire.w / 2.f;
+  enn_fire_box->box[0].ul.y = -fire.h / 2.f;
+  enn_fire_box->box[0].width = (double)fire.w;
+  enn_fire_box->box[0].height = (double)fire.h;
+
+  enn_fire_box->box[0].ur.x = enn_fire_box->box[0].ul.x + enn_fire_box->box[0].width;
+  enn_fire_box->box[0].ur.y = enn_fire_box->box[0].ul.y;
+
+  enn_fire_box->box[0].bl.x = enn_fire_box->box[0].ul.x;
+  enn_fire_box->box[0].bl.y = enn_fire_box->box[0].ul.y + enn_fire_box->box[0].height;
+
+  enn_fire_box->box[0].br.x = enn_fire_box->box[0].ul.x + enn_fire_box->box[0].width;
+  enn_fire_box->box[0].br.y = enn_fire_box->box[0].ul.y + enn_fire_box->box[0].height;
+}
+
+
 void setEnemy1BoundingBox(BoundingBox *en_box)
 {
   if (en_box->nb_box != NB_BOUNDING_BOX_ENEMY1)
   {
-    printf("Error in setEnemy1BoundingBox 2 BoundingBox are expected\n");
-    stopGame();
+    printf("%s : Error %d BoundingBox are expected\n", __FUNCTION__, NB_BOUNDING_BOX_ENEMY1);
+    Game_stop();
     return;
   }
 
@@ -92,8 +121,8 @@ void setShipBoundingBox(BoundingBox *shp_box)
 {
   if (shp_box->nb_box != NB_BOUNDING_BOX_SHIP)
   {
-    printf("Error in setShipBoundingBox 2 BoundingBox are expected\n");
-    stopGame();
+    printf("%s : Error %d BoundingBox are expected\n", __FUNCTION__, NB_BOUNDING_BOX_SHIP);
+    Game_stop();
     return;
   }
 

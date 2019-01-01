@@ -1,6 +1,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "GraphicsMgt.h"
+#include "KeyboardMgt.h"
+#include "GameMgt.h"
 
 
 typedef struct explosion
@@ -12,13 +14,12 @@ typedef struct explosion
   struct explosion *next;
 } Explosion;
 
+static SP_Texture S_GameTexture[E_TEXT_NB];
 
 static Explosion *explosionListe = NULL;
 
 Explosion *getExplosionList() { return explosionListe; }
 void updateExplosionList(Explosion *ex) { explosionListe = ex; }
-
-static SP_Texture S_GameTexture[E_TEXT_NB];
 
 
 SDL_Texture *loadImage(char *img_path)
@@ -27,8 +28,7 @@ SDL_Texture *loadImage(char *img_path)
   SDL_Surface *loadedImage = NULL;
   SDL_Texture *texture = NULL;
 
-  // loadedImage = IMG_Load(img_path); -> need SDL_image...
-  loadedImage = SDL_LoadBMP(img_path); 
+  loadedImage = IMG_Load(img_path);
    
   if (loadedImage != NULL)
   {
@@ -38,13 +38,13 @@ SDL_Texture *loadImage(char *img_path)
     SDL_FreeSurface(loadedImage);
     if(texture == NULL)
     {
-      printf("Texture non créée ! SDL_Error : %s\n", SDL_GetError());
+      printf("%s : Texture \"%s\" non créée ! SDL_Error = %s\n", __FUNCTION__, img_path, SDL_GetError());
       exit(0);
     }
   }
   else
   {
-    printf("L'image n'a pas pu être chargée! SDL_Error : %s\n", SDL_GetError());
+    printf("%s : L'image \"%s\" n'a pas pu être chargée! SDL_Error = %s\n", __FUNCTION__, img_path, SDL_GetError());
     exit(0);
   } 
   return texture; 
@@ -57,11 +57,11 @@ SDL_Texture *loadImageAlpha(char *img_path, int r, int g, int b)
   SDL_Surface *loadedImage = NULL;
   SDL_Texture *texture = NULL;
 
-  // loadedImage = IMG_Load(img_path); -> need SDL_image.h ...
-  loadedImage = SDL_LoadBMP(img_path); 
+  loadedImage = IMG_Load(img_path);
+
   if (loadedImage != NULL)
   {
-    //Application du filtre de transparence
+    // Application du filtre de transparence
     SDL_SetColorKey(loadedImage, SDL_TRUE, SDL_MapRGB(loadedImage->format, r, g, b));
     // Conversion de l'image en texture
     texture = SDL_CreateTextureFromSurface(getRenderer(), loadedImage);
@@ -69,13 +69,13 @@ SDL_Texture *loadImageAlpha(char *img_path, int r, int g, int b)
     SDL_FreeSurface(loadedImage);
     if(texture == NULL)
     {
-      printf("Texture non créée ! SDL_Error : %s\n", SDL_GetError());
+      printf("%s : Texture \"%s\" non créée ! SDL_Error = %s\n", __FUNCTION__, img_path, SDL_GetError());
       exit(0);
     }
   }
   else
   {
-    printf("L'image n'a pas pu être chargée! SDL_Error : %s\n", SDL_GetError());
+    printf("%s : L'image \"%s\" n'a pas pu être chargée! SDL_Error = %s\n", __FUNCTION__, img_path, SDL_GetError());
     exit(0);
   } 
   return texture; 
@@ -87,8 +87,8 @@ void getTextureDimension (SpaceAttack_te_texture txt_id, SA_Rect *r)
   SDL_Rect sdl_r;
   if(SDL_QueryTexture(S_GameTexture[txt_id].texture , NULL, NULL, &(sdl_r.w), &(sdl_r.h)) < 0) 
   {
-    printf("Can not get texture dimension ! SDL_Error : %s", SDL_GetError());
-    stopGame();
+    printf("%s : Can not get texture dimension ! SDL_Error = %s", __FUNCTION__, SDL_GetError());
+    Game_stop();
   }
 
   r->w = (double)sdl_r.w;
@@ -96,7 +96,7 @@ void getTextureDimension (SpaceAttack_te_texture txt_id, SA_Rect *r)
 }
 
 
-void loadGraphics(void)
+void Graphics_loadImages( void )
 {
   S_GameTexture[E_TEXT_BACKGROUND].texture = loadImage(P_BACKGROUND);
   S_GameTexture[E_TEXT_BACKGROUND].angular_offset = 90;
@@ -104,24 +104,21 @@ void loadGraphics(void)
   S_GameTexture[E_TEXT_SHIP].texture = loadImageAlpha(P_SHIP,255,0,255);
   S_GameTexture[E_TEXT_SHIP].angular_offset = 90;
 
-  S_GameTexture[E_TEXT_SHIP_MAIN_FIRE].texture = loadImageAlpha(P_SHIP_FIRE,0,0,0);
+  S_GameTexture[E_TEXT_SHIP_MAIN_FIRE].texture = loadImageAlpha(P_SHIP_MAIN_FIRE,0,0,0);
   S_GameTexture[E_TEXT_SHIP_MAIN_FIRE].angular_offset = 90;
 
   S_GameTexture[E_TEXT_ENEMY1].texture = loadImageAlpha(P_ENEMY1,0,0,0);
   S_GameTexture[E_TEXT_ENEMY1].angular_offset = -90;
 
-  S_GameTexture[E_TEXT_BOSS_LIFE].texture = loadImageAlpha(BOSS_LIFE,0,0,0);
-  S_GameTexture[E_TEXT_BOSS_LIFE].angular_offset = 90;
+  S_GameTexture[E_TEXT_ENEMY1_MAIN_FIRE].texture = loadImageAlpha(P_ENEMY1_MAIN_FIRE,0,0,0);
+  S_GameTexture[E_TEXT_ENEMY1_MAIN_FIRE].angular_offset = 90;
 
-  int i;
-  for(i = 0; i < NB_EXPLOSION; i++ )
-  {
-    char expl_path[256];
-    sprintf(expl_path,"%s%d.bmp",P_EXPLOSION,i+1);
+  S_GameTexture[E_TEXT_P_BOSS_LIFE].texture = loadImageAlpha(P_BOSS_LIFE,0,0,0);
+  S_GameTexture[E_TEXT_P_BOSS_LIFE].angular_offset = 90;
 
-    S_GameTexture[E_TEXT_EXPLOSION+i].texture = loadImageAlpha(expl_path,0,0,0);
-    S_GameTexture[E_TEXT_EXPLOSION+i].angular_offset = 90;
-  } 
+  S_GameTexture[E_TEXT_EXPLOSION_SPRITES].texture = loadImage(P_EXPLOSION_SPRITES);
+  S_GameTexture[E_TEXT_EXPLOSION_SPRITES].angular_offset = 0;
+
 }
 
 
@@ -139,10 +136,13 @@ void requestExplosion(SA_Rect position)
   // Creation of an explosion element. It will be destroyed by endExplosion() function.
   Explosion *ex;
   ex = malloc(sizeof(Explosion));
- 
-  ex->pos = position;
+  ex->pos           = position;
+  /* Position given is no longer the center but the one in upper left corner  */
+  ex->pos.x         = position.x - position.w / 2.f;
+  ex->pos.y         = position.y - position.h / 2.f;
+  
   ex->previous_tick = 0;
-  ex->collision_id = E_TEXT_EXPLOSION;  
+  ex->collision_id  = 0;
 
   // Add it at the beginning of list
   ex->next = getExplosionList();
@@ -190,37 +190,55 @@ void deleteAllExplosions()
 void drawExplosion ()
 {
   Explosion *pl_ex = getExplosionList();
+  /* If no explosion required */
   if ( NULL == pl_ex )
     return;
   
-  int tick = SDL_GetTicks();
+  int tick = Keybord_getTick() /*SDL_GetTicks()*/;
   while ( pl_ex != NULL )
   {
+    /* Update Explosion sprite to draw depending on frequency */
     if (tick - pl_ex->previous_tick > EXPLOSION_FREQUENCY )
     {
       pl_ex->previous_tick = tick;
       pl_ex->collision_id ++;
+    
 
-      if ( pl_ex->collision_id > NB_EXPLOSION+E_TEXT_EXPLOSION-1)
+      if ( pl_ex->collision_id > EXPLOSION_NB)
       {
         endExplosion(pl_ex);
+        pl_ex = pl_ex->next;
         continue;
       }
     }
 
+    /* Where is the sprite drew on image */
+    SDL_Rect sprite;
+    /*   - Upper left corner position     */
+    sprite.x = EXPLOSION_SPRITE_SQUARE * ((pl_ex->collision_id-1)%5);
+    sprite.y = EXPLOSION_SPRITE_SQUARE * ((pl_ex->collision_id-1)/5);
+    /*   - Sprite square length and width */
+    sprite.w = EXPLOSION_SPRITE_SQUARE;
+    sprite.h = EXPLOSION_SPRITE_SQUARE;
+
+    /* Where the sprite will be draw on game Window */
+    /*   - Coordinates = SA Element */
     SDL_Rect texture_ex = SA_to_SDL_Rect(pl_ex->pos);
-    //getTextureDimension(S_GameTexture[pl_ex->collision_id].texture, &texture_ex);
-    SDL_QueryTexture(S_GameTexture[pl_ex->collision_id].texture, NULL, NULL, &(texture_ex.w), &(texture_ex.h) );
-    
+    /*   - Scale = Sprite           */
+    /*texture_ex.w = EXPLOSION_SPRITE_SQUARE;
+    texture_ex.h = EXPLOSION_SPRITE_SQUARE;*/
+
+    /* Rotation Sprite center */
     SDL_Point center;
     center.x = round(texture_ex.w / 2.f);
     center.y = round(texture_ex.h / 2.f);
 
+    /* Drawing */
     if ( 0 > SDL_RenderCopyEx( getRenderer(),
-                               S_GameTexture[pl_ex->collision_id].texture,
-                               NULL,
+                               S_GameTexture[E_TEXT_EXPLOSION_SPRITES].texture,
+                               &sprite,
                                &texture_ex,
-                               S_GameTexture[pl_ex->collision_id].angular_offset,
+                               S_GameTexture[E_TEXT_EXPLOSION_SPRITES].angular_offset,
                                &center,
                                SDL_FLIP_NONE ) 
        )
@@ -235,7 +253,8 @@ void drawExplosion ()
 }
 
 
-void cleanGraphics(void)
+
+void Graphics_clean(void)
 {
   // Delete remaning Explosion object
   deleteAllExplosions();
@@ -249,30 +268,40 @@ void cleanGraphics(void)
 }
 
 
-void drawSATexture(SpaceAttack_te_texture txt_id, SA_Rect pos, double angle)
+void Graphics_drawSATexture(SpaceAttack_te_texture txt_id, SA_Rect pos, double angle)
 {
-  SDL_Point center;
-  center.x = round(pos.w / 2.f);
-  center.y = round(pos.h / 2.f);
+  SDL_Rect src_texture = SA_to_SDL_Rect(pos);
+  src_texture.x = 0;
+  src_texture.y = 0;
+  /* Select a portion of source sprite
+  src_texture.w = src_texture.w / 2; 
+  src_texture.h = src_texture.h / 2; */
 
-  SDL_Rect texture_pos = SA_to_SDL_Rect(pos);
-  texture_pos.x -= pos.w / 2;
-  texture_pos.y -= pos.h / 2;
+  SDL_Rect dest_texture = SA_to_SDL_Rect(pos);
+  dest_texture.x -= pos.w / 2;
+  dest_texture.y -= pos.h / 2;
+  /* Scaling the texture simply by setting the width and height
+  dest_texture.w -= pos.w / 4;
+  dest_texture.h -= pos.h / 4; */
+
+  SDL_Point center;
+  center.x = dest_texture.w / 2; //round(pos.w / 2.f);
+  center.y = dest_texture.h/ 2; //round(pos.h / 2.f);
 
   if (0 > SDL_RenderCopyEx( getRenderer(), 
                             S_GameTexture[txt_id].texture, 
-                            NULL, 
-                            &texture_pos, 
+                            &src_texture,   /* Source Rect*/
+                            &dest_texture,  /* Destination Rect*/
                             round(angle + S_GameTexture[txt_id].angular_offset), 
                             &center, 
                             SDL_FLIP_NONE )
      )
   {
     printf("Error while drawing element. SDL Error : %s\n", SDL_GetError());
-    stopGame();
+    Game_stop();
     return;
   }
-  Graphics_drawPoint(pos.x, pos.y);
+  // Graphics_drawPoint(pos.x, pos.y);
 }
 
 
@@ -285,13 +314,13 @@ void Graphics_drawPoint(int x, int y)
   dest.w = size;
   dest.h = size;
   SDL_RenderCopy( getRenderer(),
-                  S_GameTexture[E_TEXT_BOSS_LIFE].texture, 
+                  S_GameTexture[E_TEXT_P_BOSS_LIFE].texture, 
                   NULL, 
                   &dest );
 }
 
 
-static void drawTexture(SDL_Texture *image, int x, int y, int angle)
+static void Graphics_drawTexture(SDL_Texture *image, int x, int y, int angle)
 { 
   SDL_Rect dest;
   // Règle le rectangle à dessiner selon la taille de l'image source
@@ -314,7 +343,7 @@ static void drawTexture(SDL_Texture *image, int x, int y, int angle)
      )
   {
     printf("Error when rotate. SDL Error : %s\n", SDL_GetError());
-    stopGame();
+    Game_stop();
     return;
   }
 }
